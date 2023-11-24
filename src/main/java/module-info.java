@@ -5,6 +5,7 @@ module SoundWaveProject {
     requires com.dlsc.formsfx;
     requires java.sql;
     requires java.xml.bind;
+    requires java.persistence;
 
 
     opens accesoadatos.soundwaveproject.controller to javafx.fxml;
