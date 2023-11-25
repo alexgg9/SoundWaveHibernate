@@ -1,23 +1,32 @@
 package accesoadatos.soundwaveproject.model;
-
+import accesoadatos.soundwaveproject.model.Usuario;
+import accesoadatos.soundwaveproject.model.Lista;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 
-public class Comentario {
+@Entity
+@Table(name = "COMENTARIO")
+public class Comentario implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "contenido")
     private String contenido;
+    @Column(name = "fecha")
     private LocalDate fecha;
+    @ManyToOne()
+    @JoinColumn(name = "dni_usuario")
     private Usuario usuario;
+
+    @ManyToOne()
+    @JoinColumn(name = "id_lista")
     private Lista lista;
 
     public Comentario() {
-        this.id=0;
-        this.contenido="";
-        this.fecha=null;
-        this.usuario=null;
-        this.lista=null;
-
+        this(-1,"",null,null,null);
     }
 
     public Comentario(int id, String contenido, LocalDate fecha, Usuario usuario, Lista lista) {
