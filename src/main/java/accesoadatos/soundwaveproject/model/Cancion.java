@@ -2,15 +2,29 @@ package accesoadatos.soundwaveproject.model;
 
 import accesoadatos.soundwaveproject.utils.Utils;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.Objects;
 
-public class Cancion {
+@Entity
+@Table(name = "cancion")
+public class Cancion implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+	@Column(name = "nombre")
     private String nombre;
+	@Column(name = "duracion")
     private int duracion;
+	@Column(name = "genero")
     private String genero;
+	@Column(name = "url")
 	private String url;
+	@ManyToOne
+	@JoinColumn(name = "disco_id")
 	private Disco disco;
 
 
@@ -24,6 +38,7 @@ public class Cancion {
 	}
 
 	public Cancion() {
+		this(-1, "", 0, "", "",null);
 
 	}
 
