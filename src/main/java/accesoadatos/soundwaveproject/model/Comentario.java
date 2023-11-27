@@ -1,6 +1,4 @@
 package accesoadatos.soundwaveproject.model;
-import accesoadatos.soundwaveproject.model.Usuario;
-import accesoadatos.soundwaveproject.model.Lista;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
