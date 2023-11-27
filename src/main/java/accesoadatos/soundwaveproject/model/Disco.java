@@ -1,34 +1,51 @@
 package accesoadatos.soundwaveproject.model;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Disco {
+@Entity
+@Table(name = "DISCO")
+public class Disco implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "nombre")
     private String nombre;
+    @Column(name = "fecha", columnDefinition = "DATE")
     private LocalDate fechaPublicacion;
-    private byte [] foto;
-    private String reproduccion;
-    private Artista artista;
-    private  List<Cancion> canciones;
+    @Lob
+    @Column(name = "foto", columnDefinition = "BLOB")
+    private byte[] foto;
 
-    public Disco(List<Cancion> canciones) {
-        canciones = canciones;
-    }
+    @Column(name = "reproduccion")
+    private String reproduccion;
+    @ManyToMany
+    @JoinTable(
+            name = "DISCO_ARTISTA",
+            joinColumns = @JoinColumn(name = "disco_id"),
+            inverseJoinColumns = @JoinColumn(name = "artista_id")
+    )
+    private List<Artista> artistas;
+
+    @OneToMany(mappedBy = "disco")
+    private List<Cancion> canciones;
 
     public Disco() {
 
     }
 
-    public Disco(int id, String nombre, LocalDate fechaPublicacion, byte[] foto, String reproducion, Artista artista, List<Cancion> canciones) {
+    public Disco(int id, String nombre, LocalDate fechaPublicacion, byte[] foto, String reproduccion, List<Artista> artistas, List<Cancion> canciones) {
         this.id = id;
         this.nombre = nombre;
         this.fechaPublicacion = fechaPublicacion;
         this.foto = foto;
-        this.reproduccion = reproducion;
-        this.artista = artista;
+        this.reproduccion = reproduccion;
+        this.artistas = artistas;
         this.canciones = canciones;
     }
 
@@ -68,16 +85,16 @@ public class Disco {
         return reproduccion;
     }
 
-    public void setReproduccion(String reproducion) {
-        this.reproduccion = reproducion;
+    public void setReproduccion(String reproduccion) {
+        this.reproduccion = reproduccion;
     }
 
-    public Artista getArtista() {
-        return artista;
+    public List<Artista> getArtistas() {
+        return artistas;
     }
 
-    public void setArtista(Artista artista) {
-        this.artista = artista;
+    public void setArtistas(List<Artista> artistas) {
+        this.artistas = artistas;
     }
 
     public List<Cancion> getCanciones() {
@@ -103,11 +120,14 @@ public class Disco {
 
     @Override
     public String toString() {
-        return "Disco - " +
-                "id:'" + id + '\'' +
-                ", nombre:'" + nombre + '\'' +
-                ", fechaPublicacion:" + fechaPublicacion +
-                ", reproducion:'" + reproduccion + '\'' +
-                ", artista:" + artista.getDni();
+        return "Disco{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", fechaPublicacion=" + fechaPublicacion +
+                ", foto=" + Arrays.toString(foto) +
+                ", reproduccion='" + reproduccion + '\'' +
+                ", artistas=" + artistas +
+                ", canciones=" + canciones +
+                '}';
     }
 }
