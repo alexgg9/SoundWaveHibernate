@@ -32,7 +32,8 @@ public class Disco implements Serializable {
     )
     private List<Artista> artistas;
 
-    @OneToMany(mappedBy = "disco")
+    @OneToMany
+    @JoinColumn(name = "id_cancion")
     private List<Cancion> canciones;
 
     public Disco() {
