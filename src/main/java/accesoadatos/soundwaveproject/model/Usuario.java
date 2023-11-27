@@ -1,19 +1,32 @@
 package accesoadatos.soundwaveproject.model;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-public class Usuario {
+@Entity
+@Table(name = "USUARIO")
+public class Usuario implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Column(name = "dni")
     private String dni;
+    @Column(name = "nombre")
     private String nombre;
+    @Column(name = "correo")
     private String correo;
+    @Column(name = "contraseña")
     private String contraseña;
+    @Column(name = "foto")
     private byte[] foto;
-    private List<Lista> misListas;
-    private List<Comentario> comentarios;
-    private List<Lista> suscripciones;
+    @OneToMany(mappedBy = "creador", cascade = CascadeType.ALL)
+    private List<Lista> misListas = new ArrayList<>();
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Comentario> comentarios = new ArrayList<>();
+    @ManyToMany(mappedBy = "suscripciones")
+    private List<Lista> suscripciones = new ArrayList<>();
 
     public Usuario() {
     }
