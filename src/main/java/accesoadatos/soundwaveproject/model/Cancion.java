@@ -8,7 +8,7 @@ import java.sql.Time;
 import java.util.Objects;
 
 @Entity
-@Table(name = "cancion")
+@Table(name = "CANCION")
 public class Cancion implements Serializable {
 
 	private static final long serialVersionUID = 1L;
