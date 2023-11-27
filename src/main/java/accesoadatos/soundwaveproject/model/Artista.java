@@ -1,16 +1,43 @@
 package accesoadatos.soundwaveproject.model;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Artista {
-   private String dni;
-   private String nombre;
-   private String nacionalidad;
-   private byte [] foto;
-   private List<Disco> discos;
+@Entity
+@Table(name = "ARTISTA")
+public class Artista implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String dni;
+    @Column(name = "nombre")
+    private String nombre;
+    @Column(name = "nacionalidad")
+    private String nacionalidad;
+    @Column(name = "foto", columnDefinition = "BLOB")
+    private byte[] foto;
+    @ManyToMany
+    @JoinTable(
+            name = "ARTISTA_DISCO",
+            joinColumns = @JoinColumn(name = "dni_artista"),
+            inverseJoinColumns = @JoinColumn(name = "id_disco")
+    )
+    private List<Disco> discos;
 
+
+    public Artista() {
+    }
+
+    public Artista(String dni, String nombre, String nacionalidad, byte[] foto, List<Disco> discos) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.nacionalidad = nacionalidad;
+        this.foto = foto;
+        this.discos = discos;
+    }
 
     public String getDni() {
         return dni;
@@ -57,20 +84,24 @@ public class Artista {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Artista artista = (Artista) o;
-        return dni.equals(artista.dni);
+        return dni.equals(artista.dni) && Arrays.equals(foto, artista.foto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dni);
+        int result = Objects.hash(dni);
+        result = 31 * result + Arrays.hashCode(foto);
+        return result;
     }
 
     @Override
     public String toString() {
-        return "Artista - " +
-                "dni: '" + dni + '\'' +
-                ", nombre: '" + nombre + '\'' +
-                ", nacionalidad: '" + nacionalidad + '\'' +
-                ", discos: " + discos;
+        return "Artista{" +
+                "dni='" + dni + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", nacionalidad='" + nacionalidad + '\'' +
+                ", foto=" + Arrays.toString(foto) +
+                ", discos=" + discos +
+                '}';
     }
 }
