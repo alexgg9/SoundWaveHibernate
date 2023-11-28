@@ -15,41 +15,43 @@ public class Lista implements Serializable {
     private String nombre;
     @Column(name = "descripcion")
     private String descripcion;
-    @Column(name = "suscripciones")
-    private int suscripciones;
     @ManyToOne // Relación con misListas
     @JoinColumn(name = "dni_usuario")
     private Usuario creador;
     @OneToMany(mappedBy = "lista", cascade = CascadeType.ALL)
     private List<Comentario> comentarios = new ArrayList<>();
+    @ManyToMany(mappedBy = "suscripciones")
+    private List<Usuario> suscriptores = new ArrayList<>();
 
 
     public Lista() {
     }
 
-    public Lista(String nombre, String descripcion, int suscripciones, Usuario creador) {
+    // Constructor para nuevas listas (sin ID)
+    public Lista(String nombre, String descripcion, Usuario creador, List<Comentario> comentarios, List<Usuario> suscriptores) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.suscripciones = suscripciones;
-        this.creador = creador;
-    }
-
-    public Lista(int id, String nombre, String descripcion, int suscripciones, Usuario creador) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.suscripciones = suscripciones;
-        this.creador = creador;
-    }
-
-    public Lista(int id, String nombre, String descripcion, int suscripciones, Usuario creador, List<Comentario> comentarios, List<Usuario> seguidores) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.suscripciones = suscripciones;
         this.creador = creador;
         this.comentarios = comentarios;
+        this.suscriptores = suscriptores;
+    }
 
+    // Constructor para listas existentes (con ID)
+    public Lista(int id, String nombre, String descripcion, Usuario creador) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.creador = creador;
+    }
+
+    // Constructor completo con comentarios y suscriptores
+    public Lista(int id, String nombre, String descripcion, Usuario creador, List<Comentario> comentarios, List<Usuario> suscriptores) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.creador = creador;
+        this.comentarios = comentarios;
+        this.suscriptores = suscriptores;
     }
 
     public Lista(int id, String nombre, String descripcion, ArrayList<Usuario> usuarios, ArrayList<Comentario> comentarios, ArrayList<Usuario> usuarios1) {
@@ -79,12 +81,12 @@ public class Lista implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public int getSuscripciones() {
-        return suscripciones;
+    public List<Usuario> getSuscriptores() {
+        return suscriptores;
     }
 
-    public void setSuscripciones(int suscripciones) {
-        this.suscripciones = suscripciones;
+    public void setSuscriptores(List<Usuario> suscriptores) {
+        this.suscriptores = suscriptores;
     }
 
     public Usuario getCreador() {
@@ -123,7 +125,7 @@ public class Lista implements Serializable {
                 "id: " + id +
                 ", nombre: '" + nombre + '\'' +
                 ", descripcion: '" + descripcion + '\'' +
-                ", suscripciones: " + suscripciones;
+                ", suscriptores: " + suscriptores;
     }
 
 }
