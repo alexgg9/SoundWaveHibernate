@@ -16,17 +16,19 @@ public class ComentarioDAO extends DAO{
 
     //Los 4 primeros métodos son los que heredan de DAO<T>
     public boolean save(Comentario c){
-
+        return super.create(c);
     }
     public boolean update(Comentario c){
+        return super.update(c);
 
     }
     public boolean delete(Comentario c) {
+        return super.delete(c,c.getClass(),c.getId());
 
     }
 
     public Comentario find(int id){
-
+        return (Comentario) super.find(id, Comentario.class);
     }
 
     public List<Comentario> findAll() throws SQLException {

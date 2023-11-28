@@ -60,11 +60,46 @@ public class DAO<T> {
         return removed;
 
     }
+
+    public boolean deleteU(T o, Class<T> c, String dni) {
+        boolean removed = false;
+        manager = Connection.getConnect().createEntityManager();
+        o = manager.find(c, dni);
+
+        if (manager.contains(o)) {
+            try {
+                manager.getTransaction().begin();
+                manager.remove(o);
+                manager.getTransaction().commit();
+                manager.close();
+                removed = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                removed = false;
+            }
+        }
+        return removed;
+    }
+
     public T find(int id, Class<T> c) {
         manager = Connection.getConnect().createEntityManager();
         try {
             manager.getTransaction().begin();
             T o = manager.find(c, id);
+            manager.getTransaction().commit();
+            manager.close();
+            return o;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public T findU(String dni, Class<T> c) {
+        manager = Connection.getConnect().createEntityManager();
+        try {
+            manager.getTransaction().begin();
+            T o = manager.find(c, dni);
             manager.getTransaction().commit();
             manager.close();
             return o;

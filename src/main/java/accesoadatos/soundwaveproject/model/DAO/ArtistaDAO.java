@@ -1,6 +1,7 @@
 package accesoadatos.soundwaveproject.model.DAO;
 
 import accesoadatos.soundwaveproject.model.Artista;
+import accesoadatos.soundwaveproject.model.Comentario;
 import accesoadatos.soundwaveproject.model.Disco;
 
 import javax.persistence.EntityManager;
@@ -21,19 +22,19 @@ public class ArtistaDAO extends DAO{
 
     //Los 4 primeros métodos son los que heredan de DAO<T>
     public boolean save(Artista artista){
-
+        return super.create(artista);
     }
 
     public boolean update(Artista artista){
-
+        return super.create(artista);
     }
 
     public boolean delete(Artista artista){
-
+        return super.deleteU(artista, Artista.class, artista.getDni());
     }
 
-    public Artista find(int id){
-
+    public Artista find(String dni){
+        return (Artista) super.findU(dni, Comentario.class);
     }
 
     public Artista findByNombre(String nombre){
