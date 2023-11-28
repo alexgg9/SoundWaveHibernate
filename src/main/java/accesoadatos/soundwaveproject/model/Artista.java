@@ -19,12 +19,7 @@ public class Artista implements Serializable {
     private String nacionalidad;
     @Column(name = "foto", columnDefinition = "BLOB")
     private byte[] foto;
-    @ManyToMany
-    @JoinTable(
-            name = "ARTISTA_DISCO",
-            joinColumns = @JoinColumn(name = "dni_artista"),
-            inverseJoinColumns = @JoinColumn(name = "id_disco")
-    )
+    @ManyToMany(mappedBy = "artistas")
     private List<Disco> discos;
 
 

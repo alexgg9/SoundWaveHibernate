@@ -3,10 +3,11 @@ package accesoadatos.soundwaveproject.model.DAO;
 import accesoadatos.soundwaveproject.model.Artista;
 import accesoadatos.soundwaveproject.model.Comentario;
 import accesoadatos.soundwaveproject.model.Disco;
+import accesoadatos.soundwaveproject.model.SQLConnection.Connection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.sql.Connection;
+import javax.persistence.TypedQuery;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,14 +38,20 @@ public class ArtistaDAO extends DAO{
         return (Artista) super.findU(dni, Comentario.class);
     }
 
-    public Artista findByNombre(String nombre){
-
+    public Artista findByNombre(String nombre) {
+        manager = Connection.getConnect().createEntityManager();
+        TypedQuery<Artista> query = manager.createQuery("SELECT a FROM Artista a WHERE a.nombre = :nombre", Artista.class);
+        query.setParameter("nombre", nombre);
+        return query.getSingleResult();
     }
 
-
-    public List<Disco> getDiscosByArtista(Artista artista) throws SQLException {
-
+    public List<Disco> getDiscosByArtista(Artista artista) {
+        EntityManager manager = Connection.getConnect().createEntityManager();
+        TypedQuery<Disco> query = manager.createQuery("SELECT d FROM Disco d WHERE d.artista = :dniArtista", Disco.class);
+        query.setParameter("dniArtista", artista.getDni());
+        return query.getResultList();
     }
+
 
 
 

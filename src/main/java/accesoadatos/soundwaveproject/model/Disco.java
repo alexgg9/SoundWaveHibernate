@@ -24,13 +24,9 @@ public class Disco implements Serializable {
 
     @Column(name = "reproduccion")
     private String reproduccion;
-    @ManyToMany
-    @JoinTable(
-            name = "DISCO_ARTISTA",
-            joinColumns = @JoinColumn(name = "disco_id"),
-            inverseJoinColumns = @JoinColumn(name = "artista_id")
-    )
-    private List<Artista> artistas;
+    @ManyToOne
+    @JoinColumn(name = "dni_artista")
+    private Artista artista;
 
     @OneToMany
     @JoinColumn(name = "id_cancion")
@@ -40,13 +36,13 @@ public class Disco implements Serializable {
 
     }
 
-    public Disco(int id, String nombre, LocalDate fechaPublicacion, byte[] foto, String reproduccion, List<Artista> artistas, List<Cancion> canciones) {
+    public Disco(int id, String nombre, LocalDate fechaPublicacion, byte[] foto, String reproduccion, Artista artista, List<Cancion> canciones) {
         this.id = id;
         this.nombre = nombre;
         this.fechaPublicacion = fechaPublicacion;
         this.foto = foto;
         this.reproduccion = reproduccion;
-        this.artistas = artistas;
+        this.artista = artista;
         this.canciones = canciones;
     }
 
@@ -90,12 +86,12 @@ public class Disco implements Serializable {
         this.reproduccion = reproduccion;
     }
 
-    public List<Artista> getArtistas() {
-        return artistas;
+    public Artista getArtista() {
+        return artista;
     }
 
-    public void setArtistas(List<Artista> artistas) {
-        this.artistas = artistas;
+    public void setArtista(Artista artista) {
+        this.artista = artista;
     }
 
     public List<Cancion> getCanciones() {
@@ -127,7 +123,7 @@ public class Disco implements Serializable {
                 ", fechaPublicacion=" + fechaPublicacion +
                 ", foto=" + Arrays.toString(foto) +
                 ", reproduccion='" + reproduccion + '\'' +
-                ", artistas=" + artistas +
+                ", artista=" + artista +
                 ", canciones=" + canciones +
                 '}';
     }
