@@ -1,9 +1,6 @@
 package accesoadatos.soundwaveproject.testsDAO;
 
 import accesoadatos.soundwaveproject.model.DAO.UsuarioDAO;
-import accesoadatos.soundwaveproject.model.Comentario;
-import accesoadatos.soundwaveproject.model.Lista;
-import accesoadatos.soundwaveproject.model.SQLConnection.ConnectionMySQL;
 import accesoadatos.soundwaveproject.model.Usuario;
 import accesoadatos.soundwaveproject.utils.Utils;
 

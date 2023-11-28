@@ -1,9 +1,10 @@
 package accesoadatos.soundwaveproject.model.DAO;
 
-import accesoadatos.soundwaveproject.model.SQLConnection.ConnectionMySQL;
 import accesoadatos.soundwaveproject.model.Artista;
 import accesoadatos.soundwaveproject.model.Disco;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,115 +12,39 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArtistaDAO {
-    private final static String INSERT = "INSERT INTO artista (dni, nombre, nacionalidad, foto) VALUES (?, ?, ?, ?)";
-    private final static String UPDATE = "UPDATE artista SET nombre = ?, nacionalidad = ?, foto = ? WHERE dni = ?";
-    private final static String SEARCHBYDNI = "SELECT dni, nombre, nacionalidad, foto FROM artista WHERE dni = ?";
-    private final static String DELETE = "DELETE FROM artista WHERE dni = ?";
-    private final static String SEARCHDISC = "SELECT nombre, fecha_publicacion, reproduccion FROM disco WHERE dni_artista = ?";
-    private final static String SEARCHBYNOMBRE = "SELECT dni, nombre, nacionalidad, foto FROM artista WHERE nombre = ?";
+public class ArtistaDAO extends DAO{
 
 
-    private Connection conn;
+    private static EntityManager manager;
+    private static EntityManagerFactory emf;
 
-    public ArtistaDAO(Connection conn){
-        this.conn = conn;
+
+    //Los 4 primeros métodos son los que heredan de DAO<T>
+    public boolean save(Artista artista){
+
     }
 
-    public ArtistaDAO(){
-        this.conn= ConnectionMySQL.getConnect();
+    public boolean update(Artista artista){
+
     }
 
-    public Artista findByDni(String dni) throws SQLException {
-        Artista result = null;
-        try (PreparedStatement pst = this.conn.prepareStatement(SEARCHBYDNI)) {
-            pst.setString(1, dni);
-            try (ResultSet res = pst.executeQuery()) {
-                if (res.next()) {
-                    result = new Artista();
-                    result.setDni(res.getString("dni"));
-                    result.setNombre(res.getString("nombre"));
-                    result.setNacionalidad(res.getString("nacionalidad"));
-                    result.setFoto(res.getBytes("foto"));
+    public boolean delete(Artista artista){
 
-                }
-            }
-        }
-        return result;
     }
-    public Artista findByNombre(String nombre) throws SQLException {
-        Artista result = null;
-        try (PreparedStatement pst = this.conn.prepareStatement(SEARCHBYNOMBRE)) {
-            pst.setString(1, nombre);
-            try (ResultSet res = pst.executeQuery()) {
-                if (res.next()) {
-                    result = new Artista();
-                    result.setDni(res.getString("dni"));
-                    result.setNombre(res.getString("nombre"));
-                    result.setNacionalidad(res.getString("nacionalidad"));
-                    result.setFoto(res.getBytes("foto"));
-                }
-            }
-        }
-        return result;
+
+    public Artista find(int id){
+
+    }
+
+    public Artista findByNombre(String nombre){
+
     }
 
 
     public List<Disco> getDiscosByArtista(Artista artista) throws SQLException {
-        List<Disco> discos = new ArrayList<>();
-        try (PreparedStatement pst = this.conn.prepareStatement(SEARCHDISC)) {
-            pst.setString(1, artista.getDni());
-            try (ResultSet res = pst.executeQuery()) {
-                while (res.next()) {
-                    Disco disco = new Disco();
-                    disco.setNombre(res.getString("nombre"));
-                    disco.setFechaPublicacion(res.getDate("fecha_publicacion").toLocalDate());
-                    disco.setReproduccion(res.getString("reproduccion"));
-                    discos.add(disco);
-                }
-            }
-        }
-        return discos;
+
     }
 
-    public Artista save(Artista entity) throws SQLException {
-        Artista result = null;
-        if (entity != null) {
-            Artista existingArtista = findByDni(entity.getDni());
-            try {
-                if (existingArtista == null) {
-                    try (PreparedStatement pst = this.conn.prepareStatement(INSERT)) {
-                        pst.setString(1, entity.getDni());
-                        pst.setString(2, entity.getNombre());
-                        pst.setString(3, entity.getNacionalidad());
-                        pst.setBytes(4, entity.getFoto());
-                        pst.executeUpdate();
-                    }
-                } else {
-                    try (PreparedStatement pst = this.conn.prepareStatement(UPDATE)) {
-                        pst.setString(1, entity.getNombre());
-                        pst.setString(2, entity.getNacionalidad());
-                        pst.setBytes(3, entity.getFoto());
-                        pst.setString(4, entity.getDni());
-                        pst.executeUpdate();
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            result = entity;
-        }
-        return result;
-    }
-
-    public void delete(Artista entity) throws SQLException {
-        if (entity != null) {
-            try (PreparedStatement pst = conn.prepareStatement(DELETE)) {
-                pst.setString(1, entity.getDni());
-                pst.executeUpdate();
-            }
-        }
-    }
 
 
 

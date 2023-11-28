@@ -1,7 +1,6 @@
 package accesoadatos.soundwaveproject.testsDAO;
 
 import accesoadatos.soundwaveproject.model.DAO.ArtistaDAO;
-import accesoadatos.soundwaveproject.model.SQLConnection.ConnectionMySQL;
 import accesoadatos.soundwaveproject.model.Artista;
 
 import java.sql.SQLException;
