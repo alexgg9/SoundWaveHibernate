@@ -1,12 +1,12 @@
 package accesoadatos.soundwaveproject.model.DAO;
 
-import accesoadatos.soundwaveproject.model.Lista;
+
 import accesoadatos.soundwaveproject.model.Comentario;
+import accesoadatos.soundwaveproject.model.SQLConnection.Connection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.sql.*;
-import java.util.ArrayList;
+import javax.persistence.Query;
 import java.util.List;
 
 public class ComentarioDAO extends DAO{
@@ -31,22 +31,31 @@ public class ComentarioDAO extends DAO{
         return (Comentario) super.find(id, Comentario.class);
     }
 
-    public List<Comentario> findAll() throws SQLException {
-
+    public List<Comentario> findAll() {
+        manager = Connection.getConnect().createEntityManager();
+        Query query = manager.createQuery("SELECT c FROM Comentario c");
+        return query.getResultList();
     }
 
-
-    public List<Comentario> findCommentsByListaId(int idLista){
-
+    public List<Comentario> findCommentsByListaId(int idLista) {
+        manager = Connection.getConnect().createEntityManager();
+        Query query = manager.createQuery("SELECT c FROM Comentario c WHERE c.lista.id = :idLista");
+        query.setParameter("idLista", idLista);
+        return query.getResultList();
     }
 
-
-    public List<Comentario> findAllByUser(String dniUsuario){
-
+    public List<Comentario> findAllByUser(String dniUsuario) {
+        manager = Connection.getConnect().createEntityManager();
+        Query query = manager.createQuery("SELECT c FROM Comentario c WHERE c.usuario.dni = :dniUsuario");
+        query.setParameter("dniUsuario", dniUsuario);
+        return query.getResultList();
     }
 
-    public List<Comentario> findAllByList(int listaId){
-
+    public List<Comentario> findAllByList(int listaId) {
+        manager = Connection.getConnect().createEntityManager();
+        Query query = manager.createQuery("SELECT c FROM Comentario c WHERE c.lista.id = :listaId");
+        query.setParameter("listaId", listaId);
+        return query.getResultList();
     }
 
 
