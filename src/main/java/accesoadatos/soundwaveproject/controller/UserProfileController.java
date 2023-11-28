@@ -52,5 +52,9 @@ public class UserProfileController {
             System.out.println("La lista de misListas es null.");
         }
     }
+    @FXML
+    public void data() throws IOException {
+        App.setRoot("controlUser");
+    }
 }
 
