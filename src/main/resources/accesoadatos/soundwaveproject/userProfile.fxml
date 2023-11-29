@@ -29,7 +29,7 @@
             <Image url="@../../img/back.png" />
          </image>
       </ImageView>
-      <Button fx:id="botonDatos" layoutX="303.0" layoutY="207.0" mnemonicParsing="false" onAction="#data" prefHeight="30.0" prefWidth="138.0" style="-fx-background-color: #185B8E; -fx-background-radius: 30px;" text="Datos" textFill="WHITE" />
+      <Button layoutX="303.0" layoutY="207.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="138.0" style="-fx-background-color: #185B8E; -fx-background-radius: 30px;" text="Datos" textFill="WHITE" />
       <Label fx:id="correoUsuario" alignment="CENTER" layoutX="273.0" layoutY="159.0" prefHeight="26.0" prefWidth="199.0" text="CORREO DEL USUARIO">
          <font>
             <Font size="16.0" />
