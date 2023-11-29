@@ -2,17 +2,22 @@ package accesoadatos.soundwaveproject.model.DAO;
 
 
 import accesoadatos.soundwaveproject.model.Comentario;
-import accesoadatos.soundwaveproject.model.SQLConnection.Connection;
+import accesoadatos.soundwaveproject.model.Connection.Connection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import java.util.List;
 
-public class ComentarioDAO extends DAO{
+public class ComentarioDAO extends DAO<Comentario>{
 
     private static EntityManager manager;
     private static EntityManagerFactory emf;
+
+    public ComentarioDAO(Class<Comentario> entityClass) {
+        super(entityClass);
+    }
+
 
     //Los 4 primeros métodos son los que heredan de DAO<T>
     public boolean save(Comentario c){
@@ -23,7 +28,7 @@ public class ComentarioDAO extends DAO{
 
     }
     public boolean delete(Comentario c) {
-        return super.delete(c,c.getClass(),c.getId());
+        return super.delete(c,c.getId());
 
     }
 
