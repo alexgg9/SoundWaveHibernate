@@ -1,16 +1,22 @@
 package accesoadatos.soundwaveproject.model.DAO;
 
-import accesoadatos.soundwaveproject.model.SQLConnection.Connection;
+import accesoadatos.soundwaveproject.model.Connection.Connection;
 
 import javax.persistence.EntityManager;
 
 public class DAO<T> {
     private static EntityManager manager;
+    private final Class<T> entityClass;
+
+    public DAO(Class<T> entityClass) {
+        this.entityClass = entityClass;
+    }
+
 
     public boolean create(T o) {
         boolean added = false;
         manager = Connection.getConnect().createEntityManager();
-        if(!manager.contains(o)) {
+        if (!manager.contains(o)) {
             try {
                 manager.getTransaction().begin();
                 manager.persist(o);
@@ -24,10 +30,11 @@ public class DAO<T> {
         }
         return added;
     }
+
     public boolean update(T o) {
         boolean updated = false;
         manager = Connection.getConnect().createEntityManager();
-        if(manager.contains(o)) {
+        if (manager.contains(o)) {
             try {
                 manager.getTransaction().begin();
                 manager.merge(o);
@@ -41,11 +48,12 @@ public class DAO<T> {
         }
         return updated;
     }
-    public boolean delete(T o, Class<T> c,int id) {
+
+    public boolean delete(T o, int id) {
         boolean removed = false;
         manager = Connection.getConnect().createEntityManager();
-        o=manager.find(c,id);
-        if(manager.contains(o)){
+        o = manager.find(entityClass, id);
+        if (manager.contains(o)) {
             try {
                 manager.getTransaction().begin();
                 manager.remove(o);
@@ -58,13 +66,12 @@ public class DAO<T> {
             }
         }
         return removed;
-
     }
 
-    public boolean deleteU(T o, Class<T> c, String dni) {
+    public boolean deleteU(T o, String dni) {
         boolean removed = false;
         manager = Connection.getConnect().createEntityManager();
-        o = manager.find(c, dni);
+        o = manager.find(entityClass, dni);
 
         if (manager.contains(o)) {
             try {
@@ -81,11 +88,11 @@ public class DAO<T> {
         return removed;
     }
 
-    public T find(int id, Class<T> c) {
+    public T find(int id, Class<T> entityClass) {
         manager = Connection.getConnect().createEntityManager();
         try {
             manager.getTransaction().begin();
-            T o = manager.find(c, id);
+            T o = manager.find(entityClass, id);
             manager.getTransaction().commit();
             manager.close();
             return o;
@@ -95,11 +102,11 @@ public class DAO<T> {
         }
     }
 
-    public T findU(String dni, Class<T> c) {
+    public T findU(String dni, Class<T> entityClass) {
         manager = Connection.getConnect().createEntityManager();
         try {
             manager.getTransaction().begin();
-            T o = manager.find(c, dni);
+            T o = manager.find(entityClass, dni);
             manager.getTransaction().commit();
             manager.close();
             return o;
