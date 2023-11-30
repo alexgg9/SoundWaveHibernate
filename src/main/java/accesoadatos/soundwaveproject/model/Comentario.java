@@ -18,7 +18,6 @@ public class Comentario implements Serializable {
     @ManyToOne()
     @JoinColumn(name = "dni_usuario")
     private Usuario usuario;
-
     @ManyToOne()
     @JoinColumn(name = "id_lista")
     private Lista lista;

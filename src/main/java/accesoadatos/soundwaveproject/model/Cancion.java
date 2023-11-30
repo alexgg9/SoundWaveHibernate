@@ -5,6 +5,8 @@ import accesoadatos.soundwaveproject.utils.Utils;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -26,6 +28,8 @@ public class Cancion implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "disco_id")
 	private Disco disco;
+	@ManyToMany(mappedBy = "canciones")
+	private List<Lista> listas= new ArrayList<>();
 
 
 	public Cancion(int id, String nombre, int duracion, String genero, String url, Disco disco) {

@@ -22,6 +22,13 @@ public class Lista implements Serializable {
     private List<Comentario> comentarios = new ArrayList<>();
     @ManyToMany(mappedBy = "suscripciones")
     private List<Usuario> suscriptores = new ArrayList<>();
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "cancion_lista",
+            joinColumns = { @JoinColumn(name = "id_cancion") },
+            inverseJoinColumns = { @JoinColumn(name = "id_lista") }
+    )
+    private List<Cancion> canciones = new ArrayList<>();
 
 
     public Lista() {
@@ -105,6 +112,13 @@ public class Lista implements Serializable {
         this.comentarios = comentarios;
     }
 
+    public List<Cancion> getCanciones() {
+        return canciones;
+    }
+
+    public void setCanciones(List<Cancion> canciones) {
+        this.canciones = canciones;
+    }
 
     @Override
     public boolean equals(Object o) {
