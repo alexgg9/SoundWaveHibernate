@@ -56,12 +56,12 @@ public class ListController {
     }
 
     @FXML
-    void borrar(ActionEvent event) throws SQLException {
+    void borrar(ActionEvent event) {
         Lista lista = userListView.getSelectionModel().getSelectedItem();
         if (lista != null) {
             userListView.getItems().remove(lista);
-            ListaDAO listaDAO = new ListaDAO();
-            listaDAO.deleteLista(lista.getId());
+            ListaDAO listaDAO = new ListaDAO(Lista.class);
+            listaDAO.delete(lista);
             Utils.showPopUp("Borrar Lista", "", "Lista eliminada correctamente", Alert.AlertType.INFORMATION);
             actualizarListas();
         } else {
@@ -90,7 +90,7 @@ public class ListController {
             Usuario usuarioActual = UserSession.getInstance().getUsuarioActual();
             String dniUsuarioActual = usuarioActual.getDni();
 
-            ListaDAO listaDAO = new ListaDAO();
+            ListaDAO listaDAO = new ListaDAO(Lista.class);
             boolean suscrito = ListaDAO.suscribirse(dniUsuarioActual, listaSeleccionada.getId());
             if (suscrito) {
                 Utils.showPopUp("Suscripción", "", "Te has suscrito correctamente", Alert.AlertType.INFORMATION);
@@ -103,14 +103,15 @@ public class ListController {
         }
     }
 
+
     @FXML
     void save(ActionEvent event) {
-        ListaDAO listaDAO = new ListaDAO();
+        ListaDAO listaDAO = new ListaDAO(Lista.class);
         String nombre = nombreField.getText();
         String descripcion = descripcionField.getText();
         Usuario usuario = UserSession.getInstance().getUsuarioActual();
-        Lista lista = new Lista(nombre, descripcion, 0, usuario);
-        listaDAO.insertLista(lista);
+        Lista lista = new Lista(nombre, descripcion, usuario, new ArrayList<>(), new ArrayList<>());
+        listaDAO.save(lista);
         Utils.showPopUp("Guardar Lista", "", "Lista guardada correctamente", Alert.AlertType.INFORMATION);
         actualizarListas();
     }
@@ -134,28 +135,29 @@ public class ListController {
     }
 
     private void actualizarListas() {
-        List<Lista> listas = getListaFromDataSource();
+        ListaDAO listaDAO = new ListaDAO(Lista.class);
+        List<Lista> listas = listaDAO.findAll();
         ObservableList<Lista> observableListas = FXCollections.observableArrayList(listas);
         userListView.setItems(observableListas);
-
 
         Lista listaSeleccionada = userListView.getSelectionModel().getSelectedItem();
         if (listaSeleccionada != null) {
             String dniUsuarioActual = UserSession.getInstance().getUsuarioActual().getDni();
             int idListaSeleccionada = listaSeleccionada.getId();
-            int numSuscriptores = ListaDAO.getNumeroSuscriptores(dniUsuarioActual, idListaSeleccionada);
-            listaSeleccionada.setSuscripciones(numSuscriptores);
+            List<Usuario> numSuscriptores = ListaDAO.getNumeroSuscriptores(dniUsuarioActual, idListaSeleccionada);
+            listaSeleccionada.setSuscriptores(numSuscriptores);
         }
     }
 
 
+
     private List<Lista> getListaFromDataSource() {
-        ListaDAO listaDAO = new ListaDAO();
+        ListaDAO listaDAO = new ListaDAO(Lista.class);
         return listaDAO.findAll();
     }
 
     private List<Cancion> getCancionesFromDataSource() {
-        CancionDAO cancionDAO = new CancionDAO();
+        CancionDAO cancionDAO = new CancionDAO(Cancion.class);
         return cancionDAO.getAllCanciones();
     }
     @FXML
@@ -163,13 +165,9 @@ public class ListController {
         Comentario comentarioSeleccionado = coments.getSelectionModel().getSelectedItem();
 
         if (comentarioSeleccionado != null) {
-            int idComentario = comentarioSeleccionado.getId();
-            ComentarioDAO comentarioDAO = new ComentarioDAO();
-
-            comentarioDAO.delete(idComentario);
-
+            ComentarioDAO comentarioDAO = new ComentarioDAO(Comentario.class);
+            comentarioDAO.delete(comentarioSeleccionado);
             coments.getItems().remove(comentarioSeleccionado);
-
             Utils.showPopUp("Borrar Comentario", "", "Comentario eliminado correctamente", Alert.AlertType.INFORMATION);
         } else {
             Utils.showPopUp("Error", "Error al borrar comentario", "Selecciona un comentario para borrar", Alert.AlertType.WARNING);
@@ -178,13 +176,8 @@ public class ListController {
 
 
     private List<Comentario> getComentarioFromDataSource(int idLista) {
-        ComentarioDAO comentarioDAO = new ComentarioDAO();
-        try {
-            return comentarioDAO.findCommentsByListaId(idLista);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+        ComentarioDAO comentarioDAO = new ComentarioDAO(Comentario.class);
+        return comentarioDAO.findCommentsByListaId(idLista);
     }
 
     @FXML
@@ -196,8 +189,10 @@ public class ListController {
             Comentario nuevoComentario = new Comentario();
             nuevoComentario.setContenido(nuevoComentarioTexto);
             nuevoComentario.setUsuario(usuarioActual);
-            int idNuevoComentario = ListaDAO.insertarComentarioEnLista(listaSeleccionada.getId(), nuevoComentario);
-            List<Comentario> comentariosActualizados = getComentarioFromDataSource(idNuevoComentario);
+            nuevoComentario.setLista(listaSeleccionada);
+            ComentarioDAO comentarioDAO = new ComentarioDAO(Comentario.class);
+            comentarioDAO.save(nuevoComentario);
+            List<Comentario> comentariosActualizados = getComentarioFromDataSource(listaSeleccionada.getId());
             ObservableList<Comentario> observableComentarios = FXCollections.observableArrayList(comentariosActualizados);
             coments.setItems(observableComentarios);
             Utils.showPopUp("Agregar Comentario", "", "Comentario añadido a la lista correctamente", Alert.AlertType.INFORMATION);
