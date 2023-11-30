@@ -1,6 +1,6 @@
 package accesoadatos.soundwaveproject.model.DAO;
 
-import accesoadatos.soundwaveproject.model.SQLConnection.Connection;
+import accesoadatos.soundwaveproject.model.Connection.Connection;
 import accesoadatos.soundwaveproject.model.Usuario;
 
 import javax.persistence.EntityManager;
@@ -14,7 +14,11 @@ public class UsuarioDAO extends DAO<Usuario> {
     private static EntityManager manager;
     private static EntityManagerFactory emf;
 
-    //Los 4 primeros métodos son los que heredan de DAO<T>
+    public UsuarioDAO(Class<Usuario> entityClass) {
+        super(entityClass);
+    }
+
+
     public boolean save(Usuario usuario) {
         return super.create(usuario);
     }
@@ -24,7 +28,7 @@ public class UsuarioDAO extends DAO<Usuario> {
     }
 
     public boolean delete(Usuario usuario) {
-        return super.delete(usuario, Usuario.class, usuario.getDni().hashCode());
+        return super.delete(usuario, usuario.getDni().hashCode());
     }
 
     public Usuario find(String dni) {
