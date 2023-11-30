@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class TestCommentDAO {
+    /**
     public static void main(String[] args) throws SQLException, IOException {
         ConnectionMySQL connection = new ConnectionMySQL();
         ComentarioDAO comentarioDAO = new ComentarioDAO();
@@ -32,4 +33,5 @@ public class TestCommentDAO {
         //comentarioDAO.save(comentario);
 
     }
+         **/
 }

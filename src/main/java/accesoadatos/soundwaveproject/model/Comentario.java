@@ -10,7 +10,7 @@ public class Comentario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    public int id;
     @Column(name = "contenido")
     private String contenido;
     @Column(name = "fecha")

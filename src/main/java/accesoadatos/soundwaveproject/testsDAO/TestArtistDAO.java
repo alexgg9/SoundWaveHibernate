@@ -6,7 +6,7 @@ import accesoadatos.soundwaveproject.model.Artista;
 import java.sql.SQLException;
 
 public class TestArtistDAO {
-    public static void main(String[] args) {
+    /**public static void main(String[] args) {
 
         String filePathString = "resources/img/kendrick.jpg";
         try {
@@ -24,5 +24,5 @@ public class TestArtistDAO {
             e.printStackTrace();
 
         }
-    }
+    }**/
 }

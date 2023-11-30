@@ -25,7 +25,7 @@ public class Disco implements Serializable {
     @Column(name = "reproduccion")
     private String reproduccion;
     @ManyToOne
-    @JoinColumn(name = "dni_artista")
+    @JoinColumn(name = "artista_id")
     private Artista artista;
 
     @OneToMany

@@ -25,7 +25,12 @@ public class Usuario implements Serializable {
     private List<Lista> misListas = new ArrayList<>();
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Comentario> comentarios = new ArrayList<>();
-    @ManyToMany(mappedBy = "suscriptores")
+    @ManyToMany
+    @JoinTable(
+            name = "SUSCRIPCION",
+            joinColumns = @JoinColumn(name = "dni"),
+            inverseJoinColumns = @JoinColumn(name = "id_lista")
+    )
     private List<Lista> suscripciones = new ArrayList<>();
 
     public Usuario() {

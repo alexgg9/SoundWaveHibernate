@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class TestDiscDAO {
+    /**
     public static void main(String[] args) {
 
         String filePathString =  "C:/Users/Alex/Intellj/SoundWaveProject/src/main/resources/img/DiscCovers/ToPimpAButterfly.jpg";
@@ -35,4 +36,5 @@ public class TestDiscDAO {
                 e.printStackTrace();
             }
     }
+     **/
 }
