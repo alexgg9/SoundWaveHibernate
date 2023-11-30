@@ -62,7 +62,7 @@ public class ListaDAO extends DAO<Lista>{
     }
 
 
-    public List<Lista> getListasByUsuario(String usuarioDni) {
+    public static List<Lista> getListasByUsuario(String usuarioDni) {
         manager = Connection.getConnect().createEntityManager();
         try {
             manager.getTransaction().begin();
