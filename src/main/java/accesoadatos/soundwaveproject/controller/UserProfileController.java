@@ -40,7 +40,7 @@ public class UserProfileController {
 
     public void initialize() {
         Usuario usuario = UserSession.getInstance().getUsuarioActual();
-        listaDAO = new ListaDAO();
+        listaDAO = new ListaDAO(Lista.class);
         if (usuario != null) {
             nombreUsuario.setText(usuario.getNombre());
             correoUsuario.setText(usuario.getCorreo());

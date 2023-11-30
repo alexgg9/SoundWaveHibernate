@@ -46,7 +46,7 @@ public class LoginController {
             return;
         }
 
-        UsuarioDAO userDAO = new UsuarioDAO();
+        UsuarioDAO userDAO = new UsuarioDAO(Usuario.class);
         Usuario user = userDAO.getByCorreo(correo);
 
         if (user != null && user.getContraseña().equals(Utils.encryptSHA256(contraseña))) {
