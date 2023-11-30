@@ -10,7 +10,9 @@ module SoundWaveProject {
 
     opens accesoadatos.soundwaveproject.controller to javafx.fxml;
     opens accesoadatos.soundwaveproject.model.Connection to java.xml.bind;
+    opens accesoadatos.soundwaveproject.model;
     exports accesoadatos.soundwaveproject;
+    exports accesoadatos.soundwaveproject.model;
     exports accesoadatos.soundwaveproject.testsDAO;
     exports accesoadatos.soundwaveproject.controller;
 }

@@ -19,7 +19,7 @@ public class Artista implements Serializable {
     private String nacionalidad;
     @Column(name = "foto", columnDefinition = "BLOB")
     private byte[] foto;
-    @ManyToMany(mappedBy = "artistas")
+    @OneToMany(mappedBy = "artista")
     private List<Disco> discos;
 
 

@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 
 public class TestUserDAO {
+    /**
 
     public static void main(String[] args) {
         String filePathString = "C:/Users/Alex/Intellj/SoundWaveProject/src/main/resources/img/userPics/foto1.png";
@@ -29,6 +30,7 @@ public class TestUserDAO {
             throw new RuntimeException(e);
         }
     }
+     **/
 
 }
 
