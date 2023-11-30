@@ -96,6 +96,7 @@ public class Lista implements Serializable {
         this.suscriptores = suscriptores;
     }
 
+
     public Usuario getCreador() {
         return creador;
     }

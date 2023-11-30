@@ -9,6 +9,7 @@ import accesoadatos.soundwaveproject.model.Usuario;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListaDAO extends DAO<Lista>{
@@ -98,21 +99,23 @@ public class ListaDAO extends DAO<Lista>{
         }
     }
 
-    public static int getNumeroSuscriptores(String dniUsuario, int idLista) {
+    public static List<Usuario> getNumeroSuscriptores(String dniUsuario, int idLista) {
         manager = Connection.getConnect().createEntityManager();
         try {
             manager.getTransaction().begin();
             Lista lista = manager.find(Lista.class, idLista);
-            int numeroSuscriptores = lista.getSuscriptores().size();
+            List<Usuario> suscriptores = lista.getSuscriptores();
             manager.getTransaction().commit();
-            return numeroSuscriptores;
+            return suscriptores;
         } catch (Exception e) {
             e.printStackTrace();
-            return -1; // Puedes manejar el error de otra manera si es necesario
+            return new ArrayList<>(); // Devolvemos una lista vacía en caso de error
         } finally {
             manager.close();
         }
     }
+
+
 
 
 
