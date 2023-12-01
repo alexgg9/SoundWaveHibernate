@@ -13,9 +13,9 @@ public class Artista implements Serializable {
     @Id
     @Column(name = "dni")
     private String dni;
-    @Column(name = "nombre")
+    @Column(name = "name")
     private String nombre;
-    @Column(name = "nacionalidad")
+    @Column(name = "nacionality")
     private String nacionalidad;
     @Column(name = "foto", columnDefinition = "BLOB")
     private byte[] foto;

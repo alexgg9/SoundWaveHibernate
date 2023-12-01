@@ -11,12 +11,12 @@ public class Lista implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "nombre")
+    @Column(name = "name")
     private String nombre;
-    @Column(name = "descripcion")
+    @Column(name = "description")
     private String descripcion;
     @ManyToOne // Relación con misListas
-    @JoinColumn(name = "dni_usuario")
+    @JoinColumn(name = "dni_user")
     private Usuario creador;
     @OneToMany(mappedBy = "lista", cascade = CascadeType.ALL)
     private List<Comentario> comentarios = new ArrayList<>();
@@ -25,8 +25,8 @@ public class Lista implements Serializable {
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "cancion_lista",
-            joinColumns = { @JoinColumn(name = "id_cancion") },
-            inverseJoinColumns = { @JoinColumn(name = "id_lista") }
+            joinColumns = { @JoinColumn(name = "id_song") },
+            inverseJoinColumns = { @JoinColumn(name = "id_list") }
     )
     private List<Cancion> canciones = new ArrayList<>();
 

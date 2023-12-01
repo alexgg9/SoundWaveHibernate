@@ -16,17 +16,18 @@ public class Cancion implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
     private int id;
-	@Column(name = "nombre")
+	@Column(name = "name")
     private String nombre;
-	@Column(name = "duracion")
+	@Column(name = "duration")
     private int duracion;
-	@Column(name = "genero")
+	@Column(name = "gender")
     private String genero;
 	@Column(name = "url")
 	private String url;
 	@ManyToOne
-	@JoinColumn(name = "disco_id")
+	@JoinColumn(name = "disc_id")
 	private Disco disco;
 	@ManyToMany(mappedBy = "canciones")
 	private List<Lista> listas= new ArrayList<>();
