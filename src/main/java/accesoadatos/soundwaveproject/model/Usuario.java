@@ -19,7 +19,7 @@ public class Usuario implements Serializable {
     private String correo;
     @Column(name = "contraseña")
     private String contraseña;
-    @Column(name = "foto")
+    @Column(name = "foto", columnDefinition = "BLOB")
     private byte[] foto;
     @OneToMany(mappedBy = "creador", cascade = CascadeType.ALL)
     private List<Lista> misListas = new ArrayList<>();

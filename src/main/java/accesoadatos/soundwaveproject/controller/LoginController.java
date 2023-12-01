@@ -44,12 +44,14 @@ public class LoginController {
             label.setText("Correo electrónico no válido");
             label.setTextFill(Color.RED);
             return;
+        }else{
+            label.setText("");
         }
 
         UsuarioDAO userDAO = new UsuarioDAO(Usuario.class);
-        Usuario user = userDAO.getByCorreo(correo);
+        Usuario user = userDAO.getByCorreo(correo,contraseña);
 
-        if (user != null && user.getContraseña().equals(Utils.encryptSHA256(contraseña))) {
+        if (user != null) {
             UserSession userSession = UserSession.getInstance();
             userSession.loginUser(user);
             label.setText("Sesión iniciada correctamente");
