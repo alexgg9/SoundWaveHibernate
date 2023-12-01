@@ -11,15 +11,15 @@ public class Comentario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
-    @Column(name = "contenido")
+    @Column(name = "content")
     private String contenido;
-    @Column(name = "fecha",columnDefinition = "DATE")
+    @Column(name = "date",columnDefinition = "DATE")
     private LocalDate fecha;
     @ManyToOne()
-    @JoinColumn(name = "dni_usuario")
+    @JoinColumn(name = "dni_user")
     private Usuario usuario;
     @ManyToOne()
-    @JoinColumn(name = "id_lista")
+    @JoinColumn(name = "id_list")
     private Lista lista;
 
     public Comentario() {

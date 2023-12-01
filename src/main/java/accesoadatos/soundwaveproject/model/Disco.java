@@ -14,18 +14,18 @@ public class Disco implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "nombre")
+    @Column(name = "name")
     private String nombre;
-    @Column(name = "fecha", columnDefinition = "DATE")
+    @Column(name = "date_song", columnDefinition = "DATE")
     private LocalDate fechaPublicacion;
     @Lob
     @Column(name = "foto", columnDefinition = "BLOB")
     private byte[] foto;
 
-    @Column(name = "reproduccion")
+    @Column(name = "reproducciones")
     private String reproduccion;
     @ManyToOne
-    @JoinColumn(name = "artista_id")
+    @JoinColumn(name = "artist_id")
     private Artista artista;
 
     @OneToMany

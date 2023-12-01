@@ -13,11 +13,11 @@ public class Usuario implements Serializable {
     @Id
     @Column(name = "dni")
     private String dni;
-    @Column(name = "nombre")
+    @Column(name = "name")
     private String nombre;
-    @Column(name = "correo")
+    @Column(name = "mail")
     private String correo;
-    @Column(name = "contraseña")
+    @Column(name = "password")
     private String contraseña;
     @Column(name = "foto", columnDefinition = "BLOB")
     private byte[] foto;
