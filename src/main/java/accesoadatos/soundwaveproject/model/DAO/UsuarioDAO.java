@@ -2,9 +2,11 @@ package accesoadatos.soundwaveproject.model.DAO;
 
 import accesoadatos.soundwaveproject.model.Connection.Connection;
 import accesoadatos.soundwaveproject.model.Usuario;
+import accesoadatos.soundwaveproject.utils.Utils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -76,16 +78,18 @@ public class UsuarioDAO extends DAO<Usuario> {
         return usuarios;
     }
 
-    public Usuario getByCorreo(String correo) {
+    public Usuario getByCorreo(String correo, String contraseña) {
         manager = Connection.getConnect().createEntityManager();
         Usuario usuario = null;
         try {
-            manager.getTransaction().begin();
-            Query q = manager.createQuery("SELECT u FROM Usuario u WHERE u.correo = :correo", Usuario.class);
+            Query q = manager.createQuery("SELECT u FROM Usuario u WHERE u.correo = :correo AND u.contraseña= :contraseña", Usuario.class);
             q.setParameter("correo", correo);
+            q.setParameter("contraseña", /*Utils.encryptSHA256(*/contraseña/*)*/);
             usuario = (Usuario) q.getSingleResult();
-            manager.getTransaction().commit();
-        } catch (Exception e) {
+            System.out.println(usuario);
+        } catch(NoResultException e){
+            System.out.println("NO ENCONTRado");
+        } catch(Exception e) {
             if (manager.getTransaction().isActive()) {
                 manager.getTransaction().rollback();
             }
@@ -93,6 +97,7 @@ public class UsuarioDAO extends DAO<Usuario> {
         } finally {
             manager.close();
         }
+        System.out.println(usuario);
         return usuario;
     }
 

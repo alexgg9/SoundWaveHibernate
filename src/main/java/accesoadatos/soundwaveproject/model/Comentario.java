@@ -13,7 +13,7 @@ public class Comentario implements Serializable {
     public int id;
     @Column(name = "contenido")
     private String contenido;
-    @Column(name = "fecha")
+    @Column(name = "fecha",columnDefinition = "DATE")
     private LocalDate fecha;
     @ManyToOne()
     @JoinColumn(name = "dni_usuario")

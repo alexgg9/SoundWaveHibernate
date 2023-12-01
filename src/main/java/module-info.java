@@ -6,6 +6,7 @@ module SoundWaveProject {
     requires java.sql;
     requires java.xml.bind;
     requires java.persistence;
+    requires org.hibernate.orm.core;
 
 
     opens accesoadatos.soundwaveproject.controller to javafx.fxml;
