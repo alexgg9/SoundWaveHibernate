@@ -29,8 +29,7 @@ public class Cancion implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "disc_id")
 	private Disco disco;
-	@ManyToMany(mappedBy = "canciones")
-	private List<Lista> listas= new ArrayList<>();
+
 
 
 	public Cancion(int id, String nombre, int duracion, String genero, String url, Disco disco) {
