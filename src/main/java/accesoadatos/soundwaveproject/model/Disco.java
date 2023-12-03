@@ -28,9 +28,6 @@ public class Disco implements Serializable {
     @JoinColumn(name = "artist_id")
     private Artista artista;
 
-    @OneToMany
-    @JoinColumn(name = "id_cancion")
-    private List<Cancion> canciones;
 
     public Disco() {
 
@@ -43,7 +40,6 @@ public class Disco implements Serializable {
         this.foto = foto;
         this.reproduccion = reproduccion;
         this.artista = artista;
-        this.canciones = canciones;
     }
 
     public int getId() {
@@ -94,13 +90,6 @@ public class Disco implements Serializable {
         this.artista = artista;
     }
 
-    public List<Cancion> getCanciones() {
-        return canciones;
-    }
-
-    public void setCanciones(List<Cancion> canciones) {
-        this.canciones = canciones;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -123,8 +112,6 @@ public class Disco implements Serializable {
                 ", fechaPublicacion=" + fechaPublicacion +
                 ", foto=" + Arrays.toString(foto) +
                 ", reproduccion='" + reproduccion + '\'' +
-                ", artista=" + artista +
-                ", canciones=" + canciones +
-                '}';
+                ", artista=" + artista + '}';
     }
 }
