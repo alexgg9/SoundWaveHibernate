@@ -2,13 +2,12 @@ package accesoadatos.soundwaveproject.model.DAO;
 
 import accesoadatos.soundwaveproject.model.Connection.Connection;
 import accesoadatos.soundwaveproject.model.Usuario;
-import accesoadatos.soundwaveproject.utils.Utils;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +15,7 @@ public class UsuarioDAO extends DAO<Usuario> {
     private static EntityManager manager;
     private static EntityManagerFactory emf;
 
-    public UsuarioDAO(Class<Usuario> entityClass) {
+    public UsuarioDAO() {
         super(entityClass);
     }
 
@@ -25,7 +24,7 @@ public class UsuarioDAO extends DAO<Usuario> {
         return super.create(usuario);
     }
 
-    public boolean update(Usuario usuario) {
+    public  boolean update(Usuario usuario) {
         return super.update(usuario);
     }
 

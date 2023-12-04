@@ -48,7 +48,7 @@ public class LoginController {
             label.setText("");
         }
 
-        UsuarioDAO userDAO = new UsuarioDAO(Usuario.class);
+        UsuarioDAO userDAO = new UsuarioDAO();
         Usuario user = userDAO.getByCorreo(correo,contraseña);
 
         if (user != null) {
