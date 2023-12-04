@@ -136,11 +136,21 @@ public class Lista implements Serializable {
 
     @Override
     public String toString() {
+
+        return "Lista{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", suscripciones=" + suscripciones +
+                ", creador=" + creador +
+                ", comentarios=" + comentarios +
+                '}';
+
         return "Lista - " +
                 "id: " + id +
                 ", nombre: '" + nombre + '\'' +
                 ", descripcion: '" + descripcion + '\'' +
                 ", suscriptores: " + suscriptores;
-    }
 
+    }
 }
