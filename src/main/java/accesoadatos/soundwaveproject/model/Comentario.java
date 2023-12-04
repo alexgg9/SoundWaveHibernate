@@ -94,11 +94,12 @@ public class Comentario implements Serializable {
 
     @Override
     public String toString() {
-        return "Comentario - " +
-                "id:" + id +
-                ", contenido:'" + contenido + '\'' +
-                ", fecha:" + fecha +
-                ", usuario:" + usuario.getDni() +
-                ", lista:" + lista.getNombre();
+        return "Comentario{" +
+                "id=" + id +
+                ", contenido='" + contenido + '\'' +
+                ", fecha=" + fecha +
+                ", usuario=" + usuario +
+                ", lista=" + lista +
+                '}';
     }
 }

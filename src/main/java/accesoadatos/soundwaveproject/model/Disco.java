@@ -103,11 +103,14 @@ public class Disco {
 
     @Override
     public String toString() {
-        return "Disco - " +
-                "id:'" + id + '\'' +
-                ", nombre:'" + nombre + '\'' +
-                ", fechaPublicacion:" + fechaPublicacion +
-                ", reproducion:'" + reproduccion + '\'' +
-                ", artista:" + artista.getDni();
+        return "Disco{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", fechaPublicacion=" + fechaPublicacion +
+                ", foto=" + Arrays.toString(foto) +
+                ", reproduccion='" + reproduccion + '\'' +
+                ", artista=" + artista +
+                ", canciones=" + canciones +
+                '}';
     }
 }

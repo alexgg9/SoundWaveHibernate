@@ -108,11 +108,13 @@ public class Lista {
 
     @Override
     public String toString() {
-        return "Lista - " +
-                "id: " + id +
-                ", nombre: '" + nombre + '\'' +
-                ", descripcion: '" + descripcion + '\'' +
-                ", suscripciones: " + suscripciones;
+        return "Lista{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", suscripciones=" + suscripciones +
+                ", creador=" + creador +
+                ", comentarios=" + comentarios +
+                '}';
     }
-
 }

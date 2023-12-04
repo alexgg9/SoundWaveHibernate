@@ -116,13 +116,15 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario - " +
-                "dni: '" + dni + '\'' +
-                ", nombre: '" + nombre + '\'' +
-                ", correo: '" + correo + '\'' +
-                ", contraseña: '" + contraseña + '\'' +
-                ", misListas: " + misListas +
-                ", comentarios: " + comentarios +
-                ", suscripciones: " + suscripciones;
+        return "Usuario{" +
+                "dni='" + dni + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", correo='" + correo + '\'' +
+                ", contraseña='" + contraseña + '\'' +
+                ", foto=" + Arrays.toString(foto) +
+                ", misListas=" + misListas +
+                ", comentarios=" + comentarios +
+                ", suscripciones=" + suscripciones +
+                '}';
     }
 }
