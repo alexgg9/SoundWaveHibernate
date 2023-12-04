@@ -49,7 +49,7 @@ public class RegistrerController {
 
     @FXML
     public void create() throws SQLException {
-        UsuarioDAO userDAO = new UsuarioDAO(Usuario.class);
+        UsuarioDAO userDAO = new UsuarioDAO();
 
         // Obtén los datos del usuario desde los campos de entrada en tu interfaz gráfica
         String dni = txtDni.getText();
