@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
+import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -48,7 +49,7 @@ public class RegistrerController {
 
     @FXML
     public void create() throws SQLException {
-        UsuarioDAO userDAO = new UsuarioDAO();
+        UsuarioDAO userDAO = new UsuarioDAO(Usuario.class);
 
         // Obtén los datos del usuario desde los campos de entrada en tu interfaz gráfica
         String dni = txtDni.getText();
@@ -70,7 +71,7 @@ public class RegistrerController {
             labelCreateUser.setText("Usuario creado correctamente");
             labelCreateUser.setTextFill(Color.GREEN);
             clearFields();
-        } catch (SQLException e) {
+        } catch (PersistenceException e) {
             labelCreateUser.setText("Error al crear el usuario");
             labelCreateUser.setTextFill(Color.RED);
             e.printStackTrace();

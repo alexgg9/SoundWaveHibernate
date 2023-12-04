@@ -40,7 +40,7 @@ public class UserProfileController {
 
     public void initialize() {
         Usuario usuario = UserSession.getInstance().getUsuarioActual();
-        listaDAO = new ListaDAO();
+        listaDAO = new ListaDAO(Lista.class);
         if (usuario != null) {
             nombreUsuario.setText(usuario.getNombre());
             correoUsuario.setText(usuario.getCorreo());
@@ -51,6 +51,10 @@ public class UserProfileController {
         } else {
             System.out.println("La lista de misListas es null.");
         }
+    }
+    @FXML
+    public void data() throws IOException {
+        App.setRoot("controlUser");
     }
 }
 

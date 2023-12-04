@@ -36,7 +36,7 @@ public class ArtistaProfileController {
     private Label nacionalidadArtista;
     private ArtistaDAO artistaDAO;
     public void initialize(){
-        artistaDAO = new ArtistaDAO();
+        artistaDAO = new ArtistaDAO(Artista.class);
     }
 
     @FXML

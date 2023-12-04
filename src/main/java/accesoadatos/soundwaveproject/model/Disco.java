@@ -1,35 +1,45 @@
 package accesoadatos.soundwaveproject.model;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Disco {
+@Entity
+@Table(name = "DISCO")
+public class Disco implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "name")
     private String nombre;
+    @Column(name = "date_song", columnDefinition = "DATE")
     private LocalDate fechaPublicacion;
-    private byte [] foto;
-    private String reproduccion;
-    private Artista artista;
-    private  List<Cancion> canciones;
+    @Lob
+    @Column(name = "foto", columnDefinition = "BLOB")
+    private byte[] foto;
 
-    public Disco(List<Cancion> canciones) {
-        canciones = canciones;
-    }
+    @Column(name = "reproducciones")
+    private String reproduccion;
+    @ManyToOne
+    @JoinColumn(name = "artist_id")
+    private Artista artista;
+
 
     public Disco() {
 
     }
 
-    public Disco(int id, String nombre, LocalDate fechaPublicacion, byte[] foto, String reproducion, Artista artista, List<Cancion> canciones) {
+    public Disco(int id, String nombre, LocalDate fechaPublicacion, byte[] foto, String reproduccion, Artista artista, List<Cancion> canciones) {
         this.id = id;
         this.nombre = nombre;
         this.fechaPublicacion = fechaPublicacion;
         this.foto = foto;
-        this.reproduccion = reproducion;
+        this.reproduccion = reproduccion;
         this.artista = artista;
-        this.canciones = canciones;
     }
 
     public int getId() {
@@ -68,8 +78,8 @@ public class Disco {
         return reproduccion;
     }
 
-    public void setReproduccion(String reproducion) {
-        this.reproduccion = reproducion;
+    public void setReproduccion(String reproduccion) {
+        this.reproduccion = reproduccion;
     }
 
     public Artista getArtista() {
@@ -80,13 +90,6 @@ public class Disco {
         this.artista = artista;
     }
 
-    public List<Cancion> getCanciones() {
-        return canciones;
-    }
-
-    public void setCanciones(List<Cancion> canciones) {
-        this.canciones = canciones;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -109,8 +112,11 @@ public class Disco {
                 ", fechaPublicacion=" + fechaPublicacion +
                 ", foto=" + Arrays.toString(foto) +
                 ", reproduccion='" + reproduccion + '\'' +
+
                 ", artista=" + artista +
                 ", canciones=" + canciones +
                 '}';
+
+
     }
 }

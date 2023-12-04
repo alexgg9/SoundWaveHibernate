@@ -1,44 +1,64 @@
 package accesoadatos.soundwaveproject.model;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-public class Lista {
+@Entity
+@Table(name = "LISTA")
+public class Lista implements Serializable {
+    @Id
+    @Column(name = "id")
     private int id;
+    @Column(name = "name")
     private String nombre;
+    @Column(name = "description")
     private String descripcion;
-    private int suscripciones;
+    @ManyToOne // Relación con misListas
+    @JoinColumn(name = "dni_user")
     private Usuario creador;
-    private List<Comentario> comentarios;
+    @OneToMany(mappedBy = "lista", cascade = CascadeType.ALL)
+    private List<Comentario> comentarios = new ArrayList<>();
+    @ManyToMany(mappedBy = "suscripciones")
+    private List<Usuario> suscriptores = new ArrayList<>();
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "cancion_lista",
+            joinColumns = { @JoinColumn(name = "id_song") },
+            inverseJoinColumns = { @JoinColumn(name = "id_list") }
+    )
+    private List<Cancion> canciones = new ArrayList<>();
 
 
     public Lista() {
     }
 
-    public Lista(String nombre, String descripcion, int suscripciones, Usuario creador) {
+    // Constructor para nuevas listas (sin ID)
+    public Lista(String nombre, String descripcion, Usuario creador, List<Comentario> comentarios, List<Usuario> suscriptores) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.suscripciones = suscripciones;
-        this.creador = creador;
-    }
-
-    public Lista(int id, String nombre, String descripcion, int suscripciones, Usuario creador) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.suscripciones = suscripciones;
-        this.creador = creador;
-    }
-
-    public Lista(int id, String nombre, String descripcion, int suscripciones, Usuario creador, List<Comentario> comentarios, List<Usuario> seguidores) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.suscripciones = suscripciones;
         this.creador = creador;
         this.comentarios = comentarios;
+        this.suscriptores = suscriptores;
+    }
 
+    // Constructor para listas existentes (con ID)
+    public Lista(int id, String nombre, String descripcion, Usuario creador) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.creador = creador;
+    }
+
+    // Constructor completo con comentarios y suscriptores
+    public Lista(int id, String nombre, String descripcion, Usuario creador, List<Comentario> comentarios, List<Usuario> suscriptores) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.creador = creador;
+        this.comentarios = comentarios;
+        this.suscriptores = suscriptores;
     }
 
     public Lista(int id, String nombre, String descripcion, ArrayList<Usuario> usuarios, ArrayList<Comentario> comentarios, ArrayList<Usuario> usuarios1) {
@@ -68,13 +88,14 @@ public class Lista {
         this.descripcion = descripcion;
     }
 
-    public int getSuscripciones() {
-        return suscripciones;
+    public List<Usuario> getSuscriptores() {
+        return suscriptores;
     }
 
-    public void setSuscripciones(int suscripciones) {
-        this.suscripciones = suscripciones;
+    public void setSuscriptores(List<Usuario> suscriptores) {
+        this.suscriptores = suscriptores;
     }
+
 
     public Usuario getCreador() {
         return creador;
@@ -92,6 +113,13 @@ public class Lista {
         this.comentarios = comentarios;
     }
 
+    public List<Cancion> getCanciones() {
+        return canciones;
+    }
+
+    public void setCanciones(List<Cancion> canciones) {
+        this.canciones = canciones;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -108,6 +136,7 @@ public class Lista {
 
     @Override
     public String toString() {
+
         return "Lista{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
@@ -116,5 +145,12 @@ public class Lista {
                 ", creador=" + creador +
                 ", comentarios=" + comentarios +
                 '}';
+
+        return "Lista - " +
+                "id: " + id +
+                ", nombre: '" + nombre + '\'' +
+                ", descripcion: '" + descripcion + '\'' +
+                ", suscriptores: " + suscriptores;
+
     }
 }

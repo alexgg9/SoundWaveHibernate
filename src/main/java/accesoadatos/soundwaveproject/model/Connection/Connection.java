@@ -1,4 +1,5 @@
-package accesoadatos.soundwaveproject.model.SQLConnection;
+package accesoadatos.soundwaveproject.model.Connection;
+import accesoadatos.soundwaveproject.utils.Loggers;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -11,7 +12,7 @@ public class Connection {
     private Connection() {
         emf = Persistence.createEntityManagerFactory("sql");
         if (emf == null) {
-            System.out.println("No se puede establecer la conexión");
+            Loggers.LogsSevere("Error al establecer la conexión");
         }
     }
 

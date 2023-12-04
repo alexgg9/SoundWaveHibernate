@@ -1,198 +1,67 @@
 package accesoadatos.soundwaveproject.model.DAO;
 
-import accesoadatos.soundwaveproject.model.Lista;
-import accesoadatos.soundwaveproject.model.SQLConnection.ConnectionMySQL;
-import accesoadatos.soundwaveproject.model.Comentario;
 
-import java.sql.*;
-import java.util.ArrayList;
+import accesoadatos.soundwaveproject.model.Comentario;
+import accesoadatos.soundwaveproject.model.Connection.Connection;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import java.util.List;
 
-public class ComentarioDAO {
+public class ComentarioDAO extends DAO<Comentario>{
 
-    private final static String INSERT = "INSERT INTO comentario (contenido, fecha, dni_usuario, id_lista) VALUES (?, ?, ?, ?)";
-    private final static String UPDATE = "UPDATE comentario SET contenido = ?, fecha=?, dni_usuario=?, id_lista=? WHERE id=?";
-    private final static String DELETE = "DELETE FROM comentario WHERE id = ?";
-    private final static String SEARCHBYID = "SELECT id, contenido, fecha, dni_usuario,id_lista FROM comentario WHERE id = ?";
-    private final static String SEARCHALL = "SELECT * FROM comentario LIMIT 15";
-    private final static String SEARCHBYUSER = "SELECT id, contenido, fecha, dni_usuario,id_lista FROM comentario WHERE dni_usuario = ?";
-    private final static String SEARCHBYIDLIST = "SELECT id, contenido, fecha, dni_usuario,id_lista FROM comentario WHERE id_lista = ?";
-    private final static String SEARCH_BY_LISTA_ID = "SELECT id, contenido, fecha, dni_usuario, id_lista FROM comentario WHERE id_lista = ?";
+    private static EntityManager manager;
+    private static EntityManagerFactory emf;
 
-
-    private Connection conn;
-
-    public ComentarioDAO(Connection conn){
-        this.conn = conn;
-    }
-
-    public ComentarioDAO(){
-        this.conn= ConnectionMySQL.getConnect();
-    }
-
-    public Comentario save(Comentario entity) throws SQLException {
-        Comentario result = null;
-        if (entity != null) {
-            Comentario existingComment = findById(entity.getId());
-            try (PreparedStatement pst = conn.prepareStatement(INSERT)) {
-                if (existingComment == null) {
-                    pst.setString(1, entity.getContenido());
-                    pst.setDate(2, Date.valueOf(entity.getFecha()));
-                    pst.setString(3, entity.getUsuario().getDni());
-                    pst.setInt(4, entity.getLista().getId());
-                    pst.executeUpdate();
-                } else {
-                    pst.setString(1, entity.getContenido());
-                    pst.setDate(2, Date.valueOf(entity.getFecha()));
-                    pst.setString(3, entity.getUsuario().getDni());
-                    pst.setInt(4, entity.getLista().getId());
-                    pst.setInt(5, entity.getId());
-                    pst.executeUpdate();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    public List<Comentario> findAll() throws SQLException {
-        List<Comentario> result = new ArrayList<>();
-        try (PreparedStatement pst = this.conn.prepareStatement(SEARCHALL)) {
-            try (ResultSet res = pst.executeQuery()) {
-                while (res.next()) {
-                    Comentario comentario = new Comentario();
-                    comentario.setId(res.getInt("id"));
-                    comentario.setContenido(res.getString("contenido"));
-                    comentario.setFecha(res.getDate("fecha").toLocalDate());
-                    comentario.setUsuario(UsuarioDAO.getByDni(res.getString("dni_usuario")));
-                    comentario.setLista(findById(res.getInt("id_lista")).getLista());
-
-                    result.add(comentario);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace(); // Manejo de excepciones en caso de error
-        }
-        return result;
+    public ComentarioDAO(Class<Comentario> entityClass) {
+        super(entityClass);
     }
 
 
+    //Los 4 primeros métodos son los que heredan de DAO<T>
+    public boolean save(Comentario c){
+        return super.create(c);
+    }
+    public boolean update(Comentario c){
+        return super.update(c);
 
-    public Comentario findById(int id) throws SQLException {
-        Comentario result = null;
-        try (PreparedStatement pst = this.conn.prepareStatement(SEARCHBYID)) {
-            pst.setInt(1, id);
-            try (ResultSet res = pst.executeQuery()) {
-                if (res.next()) {
-                    result = new Comentario();
-                    result.setId(res.getInt("id"));
-                    result.setContenido(res.getString("contenido"));
-                    result.setFecha(res.getDate("fecha").toLocalDate());
-                    result.setUsuario(UsuarioDAO.getByDni(res.getString("dni_usuario")));
+    }
+    public boolean delete(Comentario c) {
+        return super.delete(c,c.getId());
 
-                    // Obtener la Lista directamente desde la base de datos si es necesario
-                    int idLista = res.getInt("id_lista");
-                    Lista lista = ListaDAO.findById(idLista);
-
-                    // Establecer la Lista en el Comentario
-                    result.setLista(lista);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace(); // Manejo de excepciones en caso de error
-        }
-        return result;
     }
 
-
-
-    public List<Comentario> findCommentsByListaId(int idLista) throws SQLException {
-        List<Comentario> result = new ArrayList<>();
-        try (PreparedStatement pst = this.conn.prepareStatement(SEARCH_BY_LISTA_ID)) {
-            pst.setInt(1, idLista);  // Agregamos el parámetro id_lista a la consulta
-            Lista lista = ListaDAO.findById(idLista);  // Obtener la lista fuera del bucle
-
-            try (ResultSet res = pst.executeQuery()) {
-                while (res.next()) {
-                    Comentario comentario = new Comentario();
-                    comentario.setId(res.getInt("id"));
-                    comentario.setContenido(res.getString("contenido"));
-                    comentario.setFecha(res.getDate("fecha").toLocalDate());
-                    comentario.setUsuario(UsuarioDAO.getByDni(res.getString("dni_usuario")));
-                    comentario.setLista(lista);  // Establecer la misma lista para todos los comentarios
-
-                    result.add(comentario);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace(); // Manejo de excepciones en caso de error
-        }
-        return result;
+    public Comentario find(int id){
+        return (Comentario) super.find(id, Comentario.class);
     }
 
-
-    public List<Comentario> findAllByUser(String dniUsuario) throws SQLException {
-        List<Comentario> comentarios = new ArrayList<>();
-        try (PreparedStatement pst = conn.prepareStatement(SEARCHBYUSER)) {
-            pst.setString(1, dniUsuario);
-            try (ResultSet res = pst.executeQuery()) {
-                while (res.next()) {
-                    Comentario comentario = new Comentario();
-                    comentario.setId(res.getInt("id"));
-                    comentario.setContenido(res.getString("contenido"));
-                    comentario.setFecha(res.getDate("fecha").toLocalDate());
-                    comentario.setUsuario(UsuarioDAO.getByDni(res.getString("dni_usuario")));
-                    comentario.setLista(findById(res.getInt("id_lista")).getLista());
-                    comentarios.add(comentario);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return comentarios;
+    public List<Comentario> findAll() {
+        manager = Connection.getConnect().createEntityManager();
+        Query query = manager.createQuery("SELECT c FROM Comentario c");
+        return query.getResultList();
     }
 
-    public List<Comentario> findAllByList(int listaId) throws SQLException {
-        List<Comentario> comentarios = new ArrayList<>();
-        try (PreparedStatement pst = conn.prepareStatement(SEARCHBYIDLIST)) {
-            pst.setInt(1, listaId);
-            try (ResultSet res = pst.executeQuery()) {
-                while (res.next()) {
-                    Comentario comentario = new Comentario();
-                    comentario.setId(res.getInt("id"));
-                    comentario.setContenido(res.getString("contenido"));
-                    comentario.setFecha(res.getDate("fecha").toLocalDate());
-                    comentario.setUsuario(UsuarioDAO.getByDni(res.getString("dni_usuario")));
-                    comentario.setLista(findById(res.getInt("id_lista")).getLista());
-                    comentarios.add(comentario);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return comentarios;
+    public List<Comentario> findCommentsByListaId(int idLista) {
+        manager = Connection.getConnect().createEntityManager();
+        Query query = manager.createQuery("SELECT c FROM Comentario c WHERE c.lista.id = :idLista");
+        query.setParameter("idLista", idLista);
+        return query.getResultList();
     }
 
-
-
-
-
-
-    public void delete(int idComentario) {
-
-        try (PreparedStatement pst = this.conn.prepareStatement(DELETE)) {
-            pst.setInt(1, idComentario);
-            pst.executeUpdate();
-
-
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // Manejo de excepciones en caso de error al eliminar el comentario
-        }
+    public List<Comentario> findAllByUser(String dniUsuario) {
+        manager = Connection.getConnect().createEntityManager();
+        Query query = manager.createQuery("SELECT c FROM Comentario c WHERE c.usuario.dni = :dniUsuario");
+        query.setParameter("dniUsuario", dniUsuario);
+        return query.getResultList();
     }
+
+    public List<Comentario> findAllByList(int listaId) {
+        manager = Connection.getConnect().createEntityManager();
+        Query query = manager.createQuery("SELECT c FROM Comentario c WHERE c.lista.id = :listaId");
+        query.setParameter("listaId", listaId);
+        return query.getResultList();
+    }
+
 
 }

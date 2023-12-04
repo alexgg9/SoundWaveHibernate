@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accesoadatos.soundwaveproject.controller.ControllerEditUser">
+   <children>
+      <ImageView fx:id="backimg" fitHeight="28.0" fitWidth="27.0" layoutX="25.0" layoutY="34.0" onMouseClicked="#back">
+         <image>
+            <Image url="@../../img/back.png" />
+         </image>
+      </ImageView>
+      <Text fill="#1f72a6" layoutX="199.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Configurar perfil">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Text>
+      <GridPane layoutX="39.0" layoutY="82.0" prefHeight="237.0" prefWidth="178.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="184.0" minWidth="10.0" prefWidth="129.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Text fill="#8bbbd9" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Dni">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text fill="#8bbbd9" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <TextField fx:id="txtDni" prefHeight="35.0" prefWidth="151.0" style="-fx-border-color: #8bbbd9; -fx-border-style: hidden hidden solid hidden; -fx-background-color: white;" GridPane.rowIndex="1" />
+            <PasswordField fx:id="txtPassword" prefWidth="151.0" style="-fx-border-color: #8bbbd9; -fx-border-style: hidden hidden solid hidden; -fx-background-color: white;" GridPane.rowIndex="7" />
+            <Text fill="#8bbbd9" strokeType="OUTSIDE" strokeWidth="0.0" text="Contraseña" GridPane.rowIndex="6">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text fill="#8bbbd9" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" GridPane.rowIndex="4">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <TextField fx:id="txtMail" prefWidth="151.0" style="-fx-border-color: #8bbbd9; -fx-border-style: hidden hidden solid hidden; -fx-background-color: white;" GridPane.rowIndex="5" />
+            <TextField fx:id="txtName" prefWidth="151.0" style="-fx-border-color: #8bbbd9; -fx-border-style: hidden hidden solid hidden; -fx-background-color: white;" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+      <Button fx:id="updateAncout" layoutX="211.0" layoutY="345.0" mnemonicParsing="false" onAction="#update" prefHeight="27.0" prefWidth="178.0" style="-fx-background-color: #185B8E;" text="Actualizar Cuenta" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="insertfoto" layoutX="410.0" layoutY="284.0" mnemonicParsing="false" onAction="#buscafoto" prefHeight="31.0" prefWidth="107.0" style="-fx-background-color: #185B8E;" text="Insertar foto" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <ImageView fx:id="photo" fitHeight="150.0" fitWidth="200.0" layoutX="364.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</AnchorPane>

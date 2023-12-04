@@ -1,6 +1,4 @@
 package accesoadatos.soundwaveproject.model;
-import accesoadatos.soundwaveproject.model.Usuario;
-import accesoadatos.soundwaveproject.model.Lista;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -12,17 +10,16 @@ public class Comentario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(name = "contenido")
+    public int id;
+    @Column(name = "content")
     private String contenido;
-    @Column(name = "fecha")
+    @Column(name = "date",columnDefinition = "DATE")
     private LocalDate fecha;
     @ManyToOne()
-    @JoinColumn(name = "dni_usuario")
+    @JoinColumn(name = "dni_user")
     private Usuario usuario;
-
     @ManyToOne()
-    @JoinColumn(name = "id_lista")
+    @JoinColumn(name = "id_list")
     private Lista lista;
 
     public Comentario() {

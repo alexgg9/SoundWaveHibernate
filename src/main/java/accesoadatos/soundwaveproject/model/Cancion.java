@@ -5,27 +5,31 @@ import accesoadatos.soundwaveproject.utils.Utils;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "cancion")
+@Table(name = "CANCION")
 public class Cancion implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
     private int id;
-	@Column(name = "nombre")
+	@Column(name = "name")
     private String nombre;
-	@Column(name = "duracion")
+	@Column(name = "duration")
     private int duracion;
-	@Column(name = "genero")
+	@Column(name = "gender")
     private String genero;
 	@Column(name = "url")
 	private String url;
 	@ManyToOne
-	@JoinColumn(name = "disco_id")
+	@JoinColumn(name = "disc_id")
 	private Disco disco;
+
 
 
 	public Cancion(int id, String nombre, int duracion, String genero, String url, Disco disco) {

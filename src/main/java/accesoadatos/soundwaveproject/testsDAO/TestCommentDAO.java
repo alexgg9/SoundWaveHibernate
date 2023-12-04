@@ -5,18 +5,17 @@ import accesoadatos.soundwaveproject.model.DAO.ComentarioDAO;
 import accesoadatos.soundwaveproject.model.DAO.ListaDAO;
 import accesoadatos.soundwaveproject.model.DAO.UsuarioDAO;
 import accesoadatos.soundwaveproject.model.Lista;
-import accesoadatos.soundwaveproject.model.SQLConnection.ConnectionMySQL;
 import accesoadatos.soundwaveproject.model.Usuario;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class TestCommentDAO {
+    /**
     public static void main(String[] args) throws SQLException, IOException {
         ConnectionMySQL connection = new ConnectionMySQL();
         ComentarioDAO comentarioDAO = new ComentarioDAO();
@@ -34,4 +33,5 @@ public class TestCommentDAO {
         //comentarioDAO.save(comentario);
 
     }
+         **/
 }

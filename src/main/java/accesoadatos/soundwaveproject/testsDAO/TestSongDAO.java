@@ -8,7 +8,7 @@ import accesoadatos.soundwaveproject.model.Disco;
 import java.sql.SQLException;
 
 public class TestSongDAO {
-
+    /**
     public static void main(String[] args) {
         DiscoDAO discoDao = new DiscoDAO();
         CancionDAO cancionDAO = new CancionDAO();
@@ -28,5 +28,6 @@ public class TestSongDAO {
                 throw new RuntimeException(e);
             }
         }
-    }
+     **/
+}
 

@@ -45,7 +45,7 @@ public class DiscProfileController {
     private DiscoDAO discoDAO;
 
     public void initialize() {
-        discoDAO = new DiscoDAO();
+        discoDAO = new DiscoDAO(Disco.class);
     }
 
     @FXML

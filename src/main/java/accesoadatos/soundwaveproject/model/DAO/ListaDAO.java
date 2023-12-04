@@ -1,212 +1,180 @@
 package accesoadatos.soundwaveproject.model.DAO;
 
+import accesoadatos.soundwaveproject.model.Cancion;
 import accesoadatos.soundwaveproject.model.Comentario;
+import accesoadatos.soundwaveproject.model.Connection.Connection;
 import accesoadatos.soundwaveproject.model.Lista;
-import accesoadatos.soundwaveproject.model.SQLConnection.ConnectionMySQL;
 import accesoadatos.soundwaveproject.model.Usuario;
 
-import java.sql.*;
-import java.time.LocalDate;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaDAO extends Lista {
-    private final static String FINDALL = "SELECT * FROM lista LIMIT 15";
-    private final static String FINDBYID = "SELECT * FROM lista WHERE id = ?";
-    private final static String INSERT = "INSERT INTO lista (nombre, descripcion, dni_usuario, suscripciones) VALUES (?, ?, ?, ?)";
-    private final static String DELETE = "DELETE FROM lista WHERE id = ?";
-    private final static String UPDATE = "UPDATE lista SET nombre = ?, descripcion = ?, dni_usuario = ?, suscripciones = ?";
-    private static final String SELECT_BY_USUARIO = "SELECT * FROM lista WHERE dni_usuario = ?";
-    private static final String ADDSONGLIST = "INSERT INTO cancion_lista (id_lista, id_cancion) VALUES (?, ?)";
-    private static final String ADDSUB = "INSERT INTO suscripcion (dni_usuario, id_lista) VALUES (?, ?)";
-    private static final String NUMSUBS = "SELECT COUNT(*) FROM suscripcion WHERE dni_usuario = ? AND id_lista = ?";
-    private static Connection connection;
+public class ListaDAO extends DAO<Lista>{
 
-    public ListaDAO(Connection connection){
-        this.connection = connection;
+    private static EntityManager manager;
+    private static EntityManagerFactory emf;
+
+    public ListaDAO(Class<Lista> entityClass) {
+
+        super(entityClass);
     }
 
-    public ListaDAO() {
-        connection = ConnectionMySQL.getConnect();
+
+    //Los 4 primeros métodos son los que heredan de DAO<T>
+    public boolean save(Lista l) {
+        return super.create(l);
     }
+
+    public boolean update(Lista l) {
+
+        return super.create(l);
+    }
+
+    public boolean delete(Lista l){
+
+        return super.delete(l,l.getId());
+    }
+
+    public Lista find(int id) {
+
+        return (Lista) super.find(id, Lista.class);
+    }
+
+
 
     public List<Lista> findAll() {
-        List<Lista> listas = new ArrayList<>();
-
-        try (PreparedStatement pst = connection.prepareStatement(FINDALL);
-             ResultSet rs = pst.executeQuery()) {
-            while (rs.next()) {
-                Lista lista = new Lista();
-                lista.setId(rs.getInt("id"));
-                lista.setNombre(rs.getString("nombre"));
-                lista.setDescripcion(rs.getString("descripcion"));
-                lista.setCreador(UsuarioDAO.getByDni(rs.getString("dni_usuario")));
-                lista.setSuscripciones(rs.getInt("suscripciones"));
-                listas.add(lista);
-            }
-        } catch (SQLException e) {
+        manager = Connection.getConnect().createEntityManager();
+        try {
+            manager.getTransaction().begin();
+            TypedQuery<Lista> query = manager.createQuery("SELECT l FROM Lista l", Lista.class);
+            List<Lista> listas = query.getResultList();
+            manager.getTransaction().commit();
+            return listas;
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            manager.close();
         }
-
-        return listas;
     }
 
 
     public static List<Lista> getListasByUsuario(String usuarioDni) {
-        List<Lista> listas = new ArrayList<>();
-        try (PreparedStatement ps = connection.prepareStatement(SELECT_BY_USUARIO)) {
-            ps.setString(1, usuarioDni);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Lista lista = new Lista();
-                    lista.setNombre(rs.getString("nombre"));
-                    lista.setDescripcion(rs.getString("descripcion"));
-                    lista.setSuscripciones(rs.getInt("suscripciones"));
-                    listas.add(lista);
-                }
-            }
-        } catch (SQLException e) {
+        manager = Connection.getConnect().createEntityManager();
+        try {
+            manager.getTransaction().begin();
+            TypedQuery<Lista> query = manager.createQuery(
+                    "SELECT l FROM Lista l WHERE l.creador.dni = :usuarioDni", Lista.class);
+            query.setParameter("usuarioDni", usuarioDni);
+            List<Lista> listas = query.getResultList();
+            manager.getTransaction().commit();
+            return listas;
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            manager.close();
         }
-        return listas;
     }
 
 
 
 
     private List<Usuario> getSuscripcionesByListaId(int listaId) {
-        List<Usuario> suscripciones = new ArrayList<>();
-
-        try (PreparedStatement pst = connection.prepareStatement("SELECT dni_usuario FROM lista WHERE id = ?")) {
-            pst.setInt(1, listaId);
-            try (ResultSet rs = pst.executeQuery()) {
-                while (rs.next()) {
-                    String dniUsuario = rs.getString("dni_usuario");
-                    Usuario usuario = UsuarioDAO.getByDni(dniUsuario);
-                    suscripciones.add(usuario);
-                }
-            }
-        } catch (SQLException e) {
+        manager = Connection.getConnect().createEntityManager();
+        try {
+            manager.getTransaction().begin();
+            Lista lista = manager.find(Lista.class, listaId);
+            List<Usuario> suscriptores = lista.getSuscriptores();
+            manager.getTransaction().commit();
+            return suscriptores;
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            manager.close();
         }
-
-        return suscripciones;
     }
 
-    public static int getNumeroSuscriptores(String dniUsuario, int idLista) {
-        try (PreparedStatement statement = connection.prepareStatement(NUMSUBS)) {
-            statement.setString(1, dniUsuario);
-            statement.setInt(2, idLista);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt(1);
-                }
-            }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-        return 0;
-    }
-
-    public static Lista findById(int id) {
-        Lista lista = null;
-
-        try (PreparedStatement statement = connection.prepareStatement(FINDBYID)) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    lista = new Lista();
-                    lista.setId(resultSet.getInt("id"));
-                    lista.setNombre(resultSet.getString("nombre"));
-                    lista.setDescripcion(resultSet.getString("descripcion"));
-                    lista.setNombre(resultSet.getString("suscripciones"));
-                }
-            }
-        } catch (SQLException e) {
+    public static List<Usuario> getNumeroSuscriptores(String dniUsuario, int idLista) {
+        manager = Connection.getConnect().createEntityManager();
+        try {
+            manager.getTransaction().begin();
+            Lista lista = manager.find(Lista.class, idLista);
+            List<Usuario> suscriptores = lista.getSuscriptores();
+            manager.getTransaction().commit();
+            return suscriptores;
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ArrayList<>(); // Devolvemos una lista vacía en caso de error
+        } finally {
+            manager.close();
         }
-
-        return lista;
     }
+
+
+
+
 
     public static int insertarComentarioEnLista(int idLista, Comentario nuevoComentario) {
-        String INSERT_COMENTARIO = "INSERT INTO comentario (contenido, fecha, dni_usuario, id_lista) VALUES (?, ?, ?, ?)";
-
-        try (PreparedStatement statement = connection.prepareStatement(INSERT_COMENTARIO, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, nuevoComentario.getContenido());
-            statement.setDate(2, java.sql.Date.valueOf(LocalDate.now()));
-            statement.setString(3, nuevoComentario.getUsuario().getDni());
-            statement.setInt(4, idLista);
-
-            int rowsAffected = statement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                ResultSet generatedKeys = statement.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
-                }
-            }
-            return -1;
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-
-
-    public boolean insertLista(Lista lista) {
-        try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
-            statement.setString(1, lista.getNombre());
-            statement.setString(2, lista.getDescripcion());
-            statement.setString(3, lista.getCreador().getDni());
-            statement.setInt(4, lista.getSuscripciones());
-            int rowsAffected = statement.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public void deleteLista(int id) throws SQLException {
-        try (PreparedStatement pst = connection.prepareStatement(DELETE)) {
-            pst.setInt(1, id);
-            pst.executeUpdate();
+        manager = Connection.getConnect().createEntityManager();
+        try {
+            manager.getTransaction().begin();
+            Lista lista = manager.find(Lista.class, idLista);
+            nuevoComentario.setLista(lista);
+            lista.getComentarios().add(nuevoComentario);
+            manager.persist(nuevoComentario);
+            manager.getTransaction().commit();
+            return nuevoComentario.getId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1; // Puedes manejar el error de otra manera si es necesario
+        } finally {
+            manager.close();
         }
     }
 
     public static boolean agregarCancionALista(int idLista, int idCancion) {
-        try (PreparedStatement statement = connection.prepareStatement(ADDSONGLIST)) {
-            statement.setInt(1, idLista);
-            statement.setInt(2, idCancion);
-            int rowsAffected = statement.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public static boolean suscribirse(String dni, int id){
-        try (PreparedStatement statement = connection.prepareStatement(ADDSUB)) {
-            statement.setString(1, dni);
-            statement.setInt(2, id);
-            int rowsAffected = statement.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-
-
-    public void updateLista(Lista lista) {
-        try (PreparedStatement statement = connection.prepareStatement(UPDATE)) {
-            statement.setString(1, lista.getNombre());
-            statement.setString(2, lista.getDescripcion());
-            statement.setString(3, lista.getCreador().getDni());
-            statement.setInt(4, lista.getSuscripciones());
-            statement.executeUpdate();
-        } catch (SQLException e) {
+        manager = Connection.getConnect().createEntityManager();
+        try {
+            manager.getTransaction().begin();
+            Lista lista = manager.find(Lista.class, idLista);
+            Cancion cancion = manager.find(Cancion.class, idCancion);
+            if (lista != null && cancion != null) {
+                lista.getCanciones().add(cancion);
+                manager.getTransaction().commit();
+                return true;
+            } else {
+                manager.getTransaction().rollback();
+                return false;
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            return false;
+        } finally {
+            manager.close();
         }
     }
+
+    public static boolean suscribirse(String dni, int id) {
+        manager = Connection.getConnect().createEntityManager();
+        try {
+            manager.getTransaction().begin();
+            Usuario usuario = manager.find(Usuario.class, dni);
+            Lista lista = manager.find(Lista.class, id);
+            lista.getSuscriptores().add(usuario);
+            manager.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            manager.close();
+        }
+    }
+
+
 }
