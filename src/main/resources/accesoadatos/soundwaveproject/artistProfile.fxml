@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="530.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accesoadatos.soundwaveproject.controller.ArtistaProfileController">
+<AnchorPane prefHeight="530.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accesoadatos.soundwaveproject.controller.ArtistaProfileController">
    <children>
       <ImageView fx:id="portadaArtista" fitHeight="240.0" fitWidth="246.0" layoutX="24.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true" />
       <ListView fx:id="Discos" layoutX="322.0" layoutY="70.0" prefHeight="424.0" prefWidth="398.0" />
-      <TextField fx:id="searchField" layoutX="529.0" layoutY="19.0" promptText="Buscar disco..." />
+      <TextField fx:id="searchField" layoutX="529.0" layoutY="19.0" promptText="Buscar artista..." />
       <Button layoutX="24.0" layoutY="12.0" mnemonicParsing="false" onAction="#back" prefHeight="38.0" prefWidth="60.0" style="-fx-background-color: none;">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="33.0">
