@@ -96,7 +96,6 @@ public class Artista implements Serializable {
                 ", nombre='" + nombre + '\'' +
                 ", nacionalidad='" + nacionalidad + '\'' +
                 ", foto=" + Arrays.toString(foto) +
-                ", discos=" + discos +
-                '}';
+                ", discos=" + (discos != null ? discos.size() : 0);
     }
 }

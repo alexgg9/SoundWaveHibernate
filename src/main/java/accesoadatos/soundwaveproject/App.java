@@ -18,7 +18,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
-        scene = new Scene(loadFXML("list"), 742, 530);
+        scene = new Scene(loadFXML("login"), 742, 530);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -36,17 +36,14 @@ public class App extends Application {
         Parent p = loadFXML(fxml);
         Scene newScene;
 
-        if (fxml.equals("login")) {
-            newScene = createScene(fxml, 742, 530);
-            primaryStage.setResizable(false);
-
-        } else if (fxml.equals("list")) {
+        if (fxml.equals("list")) {
             newScene = createScene(fxml, 1068, 619);
             primaryStage.setResizable(false);
         } else if (fxml.equals("userProfile")) {
-        newScene = createScene(fxml, 742, 530);
-        primaryStage.setResizable(false);
-        }else if (fxml.equals("discProfile")) {
+            newScene = createScene(fxml, 742, 530);
+            primaryStage.setResizable(false);
+        }
+        else if (fxml.equals("discProfile")) {
             newScene = createScene(fxml, 742, 530);
             primaryStage.setResizable(false);
         }else if (fxml.equals("artistProfile")) {
@@ -55,7 +52,10 @@ public class App extends Application {
         }else if (fxml.equals("home")) {
             newScene = createScene(fxml, 742, 530);
             primaryStage.setResizable(false);
-        } else {
+        }else if (fxml.equals("editUser")) {
+            newScene = createScene(fxml, 742, 530);
+            primaryStage.setResizable(false);
+        }else{
             newScene = createScene(fxml, 640, 480);
             primaryStage.setResizable(true);
         }

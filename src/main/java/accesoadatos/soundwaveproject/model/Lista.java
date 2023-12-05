@@ -141,9 +141,9 @@ public class Lista implements Serializable {
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", creador=" + creador +
-                ", comentarios=" + comentarios +
-                ", suscriptores=" + suscriptores +
-                ", canciones=" + canciones +
+                ", cantidadComentarios=" + comentarios.size() +
+                ", cantidadSuscriptores=" + suscriptores.size() +
+                ", cantidadCanciones=" + canciones.size() +
                 '}';
     }
 }

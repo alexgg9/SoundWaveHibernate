@@ -1,8 +1,6 @@
 package accesoadatos.soundwaveproject.model.Connection;
 
 import accesoadatos.soundwaveproject.utils.Loggers;
-
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 

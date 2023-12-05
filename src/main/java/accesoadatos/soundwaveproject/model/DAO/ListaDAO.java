@@ -2,14 +2,16 @@ package accesoadatos.soundwaveproject.model.DAO;
 
 import accesoadatos.soundwaveproject.model.Cancion;
 import accesoadatos.soundwaveproject.model.Comentario;
-import accesoadatos.soundwaveproject.model.Connection.Connection;
 import accesoadatos.soundwaveproject.model.Lista;
 import accesoadatos.soundwaveproject.model.Usuario;
+import accesoadatos.soundwaveproject.model.Connection.Connection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ListaDAO extends DAO<Lista>{
@@ -47,17 +49,16 @@ public class ListaDAO extends DAO<Lista>{
 
     public List<Lista> findAll() {
         manager = Connection.getConnect().createEntityManager();
-        try {
-            manager.getTransaction().begin();
+        try{
+            EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
             TypedQuery<Lista> query = manager.createQuery("SELECT l FROM Lista l", Lista.class);
             List<Lista> listas = query.getResultList();
-            manager.getTransaction().commit();
+            transaction.commit();
             return listas;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
-        } finally {
-            manager.close();
+            return Collections.emptyList();
         }
     }
 
