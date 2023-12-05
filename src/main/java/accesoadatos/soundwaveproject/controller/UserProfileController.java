@@ -54,7 +54,7 @@ public class UserProfileController {
     }
     @FXML
     public void data() throws IOException {
-        App.setRoot("controlUser");
+        App.setRoot("editUser");
     }
 }
 
