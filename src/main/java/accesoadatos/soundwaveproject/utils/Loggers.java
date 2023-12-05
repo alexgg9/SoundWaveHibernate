@@ -7,10 +7,14 @@ import java.util.logging.Logger;
 
 public class Loggers {
     public static void LogsSevere(String s) {
-        try {
-            InputStream configFile = Loggers.class.getResourceAsStream("Loggin.properties");
-            LogManager.getLogManager().readConfiguration(configFile);
-        } catch (SecurityException | IOException | NullPointerException e) {
+        try (InputStream configFile = Loggers.class.getResourceAsStream("Logger.properties")) {
+            if (configFile != null) {
+                LogManager.getLogManager().readConfiguration(configFile);
+            } else {
+                System.out.println("Logger.properties not found");
+            }
+        } catch (IOException | SecurityException | NullPointerException e) {
+            e.printStackTrace();
             System.out.println("Logging system not initialized");
         }
         Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -18,13 +22,18 @@ public class Loggers {
     }
 
     public static void LogsInfo(String s) {
-        try {
-            InputStream configFile = Loggers.class.getResourceAsStream("Loggin.properties");
-            LogManager.getLogManager().readConfiguration(configFile);
-        } catch (SecurityException | IOException | NullPointerException e) {
+        try (InputStream configFile = Loggers.class.getResourceAsStream("Logger.properties")) {
+            if (configFile != null) {
+                LogManager.getLogManager().readConfiguration(configFile);
+            } else {
+                System.out.println("Logger.properties not found");
+            }
+        } catch (IOException | SecurityException | NullPointerException e) {
+            e.printStackTrace();
             System.out.println("Logging system not initialized");
         }
         Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         logger.info(s);
     }
 }
+
