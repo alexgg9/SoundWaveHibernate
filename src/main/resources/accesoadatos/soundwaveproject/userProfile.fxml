@@ -24,12 +24,12 @@
             <Image url="@../../img/userPics/foto1.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="28.0" fitWidth="27.0" layoutX="15.0" layoutY="24.0" onMouseClicked="#back">
+      <ImageView fx:id="bacimg" fitHeight="28.0" fitWidth="27.0" layoutX="15.0" layoutY="24.0" onMouseClicked="#back">
          <image>
             <Image url="@../../img/back.png" />
          </image>
       </ImageView>
-      <Button layoutX="446.0" layoutY="238.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="73.0" style="-fx-background-color: #185B8E;" text="Datos" textFill="WHITE" />
+      <Button fx:id="botonDatos" layoutX="446.0" layoutY="238.0" mnemonicParsing="false" onAction="#data" prefHeight="30.0" prefWidth="73.0" style="-fx-background-color: #185B8E;" text="Datos" textFill="WHITE" />
       <Label fx:id="correoUsuario" layoutX="204.0" layoutY="153.0" prefHeight="26.0" prefWidth="199.0" text="CORREO DEL USUARIO">
          <font>
             <Font size="16.0" />
