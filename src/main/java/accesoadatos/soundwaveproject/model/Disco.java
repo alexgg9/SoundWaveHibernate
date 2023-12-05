@@ -112,7 +112,7 @@ public class Disco implements Serializable {
                 ", fechaPublicacion=" + fechaPublicacion +
                 ", foto=" + Arrays.toString(foto) +
                 ", reproduccion='" + reproduccion + '\'' +
-                ", artista=" + artista +
+                ", artista=" + (artista != null ? artista.getNombre() : "null") +
                 '}';
     }
 }

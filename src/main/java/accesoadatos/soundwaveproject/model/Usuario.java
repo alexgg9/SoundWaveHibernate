@@ -140,9 +140,9 @@ public class Usuario implements Serializable {
                 ", correo='" + correo + '\'' +
                 ", contraseña='" + contraseña + '\'' +
                 ", foto=" + Arrays.toString(foto) +
-                ", misListas=" + misListas +
-                ", comentarios=" + comentarios +
-                ", suscripciones=" + suscripciones +
+                ", cantidadListas=" + misListas.size() +
+                ", cantidadComentarios=" + comentarios.size() +
+                ", cantidadSuscripciones=" + suscripciones.size() +
                 '}';
     }
 }

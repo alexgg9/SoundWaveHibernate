@@ -91,7 +91,7 @@ public class ControllerEditUser {
 
         // Crear un nuevo objeto Usuario con los datos actualizados
         Usuario usuarioActualizado = new Usuario(newDni, newName, newMail, newPassword, null /*foto*/);
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        UsuarioDAO usuarioDAO = new UsuarioDAO(Usuario.class);
      boolean actualizacionExitosa = usuarioDAO.update(usuarioActualizado);
 
         if (actualizacionExitosa) {

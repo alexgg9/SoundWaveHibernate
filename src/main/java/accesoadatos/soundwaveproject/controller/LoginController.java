@@ -48,10 +48,10 @@ public class LoginController {
             label.setText("");
         }
 
-        UsuarioDAO userDAO = new UsuarioDAO();
+        UsuarioDAO userDAO = new UsuarioDAO(Usuario.class);
         Usuario user = userDAO.getByCorreo(correo,contraseña);
 
-        if (user != null) {
+        if (user != null && user.getContraseña().equals(Utils.encryptSHA256(contraseña))) {
             UserSession userSession = UserSession.getInstance();
             userSession.loginUser(user);
             label.setText("Sesión iniciada correctamente");

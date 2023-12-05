@@ -82,9 +82,9 @@ public class UsuarioDAO extends DAO<Usuario> {
         manager = Connection.getConnect().createEntityManager();
         Usuario usuario = null;
         try {
-            Query q = manager.createQuery("SELECT u FROM Usuario u WHERE u.correo = :correo AND u.contraseña= :contraseña", Usuario.class);
+            Query q = manager.createQuery("SELECT u FROM Usuario u WHERE u.correo = :correo AND u.contraseña = :contraseña", Usuario.class);
             q.setParameter("correo", correo);
-            q.setParameter("contraseña", /*Utils.encryptSHA256(*/contraseña/*)*/);
+            q.setParameter("contraseña", Utils.encryptSHA256(contraseña));
             usuario = (Usuario) q.getSingleResult();
             System.out.println(usuario);
         } catch(NoResultException e){
