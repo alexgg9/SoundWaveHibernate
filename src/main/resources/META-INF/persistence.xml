@@ -14,4 +14,15 @@
             <property name = "hibernate.show_sql" value = "true" />
         </properties>
     </persistence-unit>
+
+    <persistence-unit name="h2backup">
+        <!-- Configuración para la base de datos H2 de respaldo -->
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:backup;"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+        </properties>
+    </persistence-unit>
 </persistence>
