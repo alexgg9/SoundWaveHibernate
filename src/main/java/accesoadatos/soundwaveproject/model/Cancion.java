@@ -30,6 +30,10 @@ public class Cancion implements Serializable {
 	@JoinColumn(name = "disc_id")
 	private Disco disco;
 
+	@ManyToMany(mappedBy = "canciones")
+	private List<Lista> listas = new ArrayList<>();
+
+
 
 
 	public Cancion(int id, String nombre, int duracion, String genero, String url, Disco disco) {
@@ -95,6 +99,14 @@ public class Cancion implements Serializable {
 
 	public void setGenero(String genero) {
 		this.genero = genero;
+	}
+
+	public List<Lista> getListas() {
+		return listas;
+	}
+
+	public void setListas(List<Lista> listas) {
+		this.listas = listas;
 	}
 
     @Override

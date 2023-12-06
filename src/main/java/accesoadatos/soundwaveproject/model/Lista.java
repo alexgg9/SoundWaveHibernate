@@ -1,5 +1,8 @@
 package accesoadatos.soundwaveproject.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,6 +12,7 @@ import java.util.Objects;
 @Table(name = "LISTA")
 public class Lista implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     @Column(name = "name")
@@ -18,11 +22,14 @@ public class Lista implements Serializable {
     @ManyToOne // Relación con misListas
     @JoinColumn(name = "dni_user")
     private Usuario creador;
+    @Column(name = "suscripciones")
+    private int numSuscripciones;
     @OneToMany(mappedBy = "lista", cascade = CascadeType.ALL)
     private List<Comentario> comentarios = new ArrayList<>();
     @ManyToMany(mappedBy = "suscripciones")
+    @Fetch(FetchMode.JOIN)
     private List<Usuario> suscriptores = new ArrayList<>();
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "cancion_lista",
             joinColumns = { @JoinColumn(name = "id_song") },
@@ -31,16 +38,18 @@ public class Lista implements Serializable {
     private List<Cancion> canciones = new ArrayList<>();
 
 
+
     public Lista() {
     }
 
     // Constructor para nuevas listas (sin ID)
-    public Lista(String nombre, String descripcion, Usuario creador, List<Comentario> comentarios, List<Usuario> suscriptores) {
+    public Lista(String nombre, String descripcion, Usuario creador, int numSuscripciones,List<Comentario> comentarios, List<Usuario> suscriptores) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.creador = creador;
         this.comentarios = comentarios;
         this.suscriptores = suscriptores;
+        this.numSuscripciones = 0;
     }
 
     // Constructor para listas existentes (con ID)
@@ -96,7 +105,6 @@ public class Lista implements Serializable {
         this.suscriptores = suscriptores;
     }
 
-
     public Usuario getCreador() {
         return creador;
     }
@@ -121,6 +129,14 @@ public class Lista implements Serializable {
         this.canciones = canciones;
     }
 
+    public int getNumSuscriptores() {
+        return this.numSuscripciones;
+    }
+
+    public void setNumSuscriptores(int numSuscriptores) {
+        this.numSuscripciones = numSuscriptores;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -128,6 +144,8 @@ public class Lista implements Serializable {
         Lista lista = (Lista) o;
         return id == lista.id;
     }
+
+
 
     @Override
     public int hashCode() {
