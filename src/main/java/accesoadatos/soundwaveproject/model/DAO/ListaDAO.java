@@ -31,7 +31,6 @@ public class ListaDAO extends DAO<Lista>{
     }
 
     public boolean update(Lista l) {
-
         return super.create(l);
     }
 
@@ -139,13 +138,20 @@ public class ListaDAO extends DAO<Lista>{
     }
 
     public static boolean agregarCancionALista(int idLista, int idCancion) {
-        manager = Connection.getConnect().createEntityManager();
+        EntityManager manager = Connection.getConnect().createEntityManager();
         try {
             manager.getTransaction().begin();
+
             Lista lista = manager.find(Lista.class, idLista);
             Cancion cancion = manager.find(Cancion.class, idCancion);
+
             if (lista != null && cancion != null) {
                 lista.getCanciones().add(cancion);
+                cancion.getListas().add(lista);
+
+                manager.persist(lista);
+                manager.persist(cancion);
+
                 manager.getTransaction().commit();
                 return true;
             } else {
@@ -160,15 +166,22 @@ public class ListaDAO extends DAO<Lista>{
         }
     }
 
+
+
     public static boolean suscribirse(String dni, int id) {
-        manager = Connection.getConnect().createEntityManager();
+        EntityManager manager = Connection.getConnect().createEntityManager();
         try {
             manager.getTransaction().begin();
             Usuario usuario = manager.find(Usuario.class, dni);
             Lista lista = manager.find(Lista.class, id);
-            lista.getSuscriptores().add(usuario);
-            manager.getTransaction().commit();
-            return true;
+            if (!lista.getSuscriptores().contains(usuario)) {
+                lista.getSuscriptores().add(usuario);
+                lista.setNumSuscriptores(lista.getNumSuscriptores() + 1); // Incrementar contador de suscriptores
+                manager.getTransaction().commit();
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -176,6 +189,7 @@ public class ListaDAO extends DAO<Lista>{
             manager.close();
         }
     }
+
 
 
 }

@@ -110,7 +110,7 @@ public class ListController {
         String nombre = nombreField.getText();
         String descripcion = descripcionField.getText();
         Usuario usuario = UserSession.getInstance().getUsuarioActual();
-        Lista lista = new Lista(nombre, descripcion, usuario, new ArrayList<>(), new ArrayList<>());
+        Lista lista = new Lista(nombre, descripcion, usuario, 0, new ArrayList<>(), new ArrayList<>());
         listaDAO.save(lista);
         Utils.showPopUp("Guardar Lista", "", "Lista guardada correctamente", Alert.AlertType.INFORMATION);
         actualizarListas();

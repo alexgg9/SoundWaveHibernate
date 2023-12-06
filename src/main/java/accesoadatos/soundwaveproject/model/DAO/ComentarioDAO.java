@@ -7,6 +7,7 @@ import accesoadatos.soundwaveproject.model.Connection.Connection;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ComentarioDAO extends DAO<Comentario>{
@@ -21,6 +22,7 @@ public class ComentarioDAO extends DAO<Comentario>{
 
     //Los 4 primeros métodos son los que heredan de DAO<T>
     public boolean save(Comentario c){
+        c.setFecha(LocalDate.now());
         return super.create(c);
     }
     public boolean update(Comentario c){
