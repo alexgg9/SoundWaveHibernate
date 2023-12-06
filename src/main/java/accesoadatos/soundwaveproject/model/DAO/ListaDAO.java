@@ -170,26 +170,33 @@ public class ListaDAO extends DAO<Lista>{
 
     public static boolean suscribirse(String dni, int id) {
         EntityManager manager = Connection.getConnect().createEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
         try {
-            manager.getTransaction().begin();
+            transaction.begin();
+
             Usuario usuario = manager.find(Usuario.class, dni);
             Lista lista = manager.find(Lista.class, id);
-            if (!lista.getSuscriptores().contains(usuario)) {
-                lista.getSuscriptores().add(usuario);
-                lista.setNumSuscriptores(lista.getNumSuscriptores() + 1); // Incrementar contador de suscriptores
-                manager.getTransaction().commit();
-                return true;
-            } else {
-                return false;
+
+            if (usuario != null && lista != null) {
+                List<Lista> suscripciones = usuario.getSuscripciones();
+                if (!suscripciones.contains(lista)) {
+                    suscripciones.add(lista);
+                    usuario.setSuscripciones(suscripciones);
+                    manager.merge(usuario);
+                }
             }
+
+            transaction.commit();
+            return true;
         } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
             e.printStackTrace();
             return false;
         } finally {
             manager.close();
         }
     }
-
-
 
 }

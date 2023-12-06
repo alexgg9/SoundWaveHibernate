@@ -27,8 +27,8 @@ public class Usuario implements Serializable {
     private List<Comentario> comentarios = new ArrayList<>();
     @ManyToMany
     @JoinTable(
-            name = "SUSCRIPCION",
-            joinColumns = @JoinColumn(name = "dni"),
+            name = "suscripcion",
+            joinColumns = @JoinColumn(name = "dni_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_lista")
     )
     private List<Lista> suscripciones = new ArrayList<>();

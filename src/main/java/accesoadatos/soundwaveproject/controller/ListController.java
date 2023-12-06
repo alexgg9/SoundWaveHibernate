@@ -92,6 +92,8 @@ public class ListController {
 
             ListaDAO listaDAO = new ListaDAO(Lista.class);
             boolean suscrito = ListaDAO.suscribirse(dniUsuarioActual, listaSeleccionada.getId());
+            System.out.println(dniUsuarioActual);
+            System.out.println(listaSeleccionada.getId());
             if (suscrito) {
                 Utils.showPopUp("Suscripción", "", "Te has suscrito correctamente", Alert.AlertType.INFORMATION);
                 actualizarListas();
