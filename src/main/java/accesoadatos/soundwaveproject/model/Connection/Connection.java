@@ -11,10 +11,15 @@ public class Connection {
 
 
     private Connection() {
-        emf = Persistence.createEntityManagerFactory("sql");
-        if (emf == null) {
-            Loggers.LogsSevere("Error al establecer la conexión");
-            emf = Persistence.createEntityManagerFactory("h2backup");
+        try {
+            emf = Persistence.createEntityManagerFactory("sql");
+        } catch (Exception e) {
+            Loggers.LogsSevere("Error al establecer la conexión para 'sql': " + e.getMessage());
+            try {
+                emf = Persistence.createEntityManagerFactory("h2backup");
+            } catch (Exception ex) {
+                Loggers.LogsSevere("Error al establecer la conexión para 'h2backup': " + ex.getMessage());
+            }
         }
     }
 
