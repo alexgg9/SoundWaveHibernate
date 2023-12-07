@@ -95,6 +95,9 @@ public class Utils {
      * @return Objeto Image creado a partir del arreglo de bytes.
      */
     public static Image convertBytesToArray(byte[] byteArray) {
+        if (byteArray == null) {
+            return null;
+        }
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray)) {
             return new Image(inputStream);
         } catch (IOException e) {

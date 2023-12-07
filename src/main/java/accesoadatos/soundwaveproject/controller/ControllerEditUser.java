@@ -3,8 +3,11 @@ package accesoadatos.soundwaveproject.controller;
 import accesoadatos.soundwaveproject.App;
 import accesoadatos.soundwaveproject.model.DAO.UsuarioDAO;
 import accesoadatos.soundwaveproject.model.Usuario;
+import accesoadatos.soundwaveproject.model.singleton.UserSession;
+import accesoadatos.soundwaveproject.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -16,13 +19,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 
 public class ControllerEditUser {
 
-    @FXML
-    private ImageView backimg;
 
     @FXML
     private Button insertfoto;
@@ -30,8 +33,6 @@ public class ControllerEditUser {
     @FXML
     private ImageView photo;
 
-    @FXML
-    private TextField txtDni;
 
     @FXML
     private TextField txtMail;
@@ -50,26 +51,20 @@ public class ControllerEditUser {
         App.setRoot("userProfile");
     }
 
+    private String imagePath = null;
     @FXML
     void buscafoto(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar una imagen");
-
-        // Configurar el filtro de extensión para imágenes
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Archivos de imagen (*.png, *.jpg, *.jpeg)", "*.png", "*.jpg", "*.jpeg");
         fileChooser.getExtensionFilters().add(extFilter);
-
-        // Mostrar el diálogo de selección de archivo
-        Stage stage = (Stage) insertfoto.getScene().getWindow(); // Obtener la ventana actual
+        Stage stage = (Stage) insertfoto.getScene().getWindow();
         File selectedFile = fileChooser.showOpenDialog(stage);
 
         if (selectedFile != null) {
-            // Actualizar la imagen en la interfaz gráfica
+            imagePath = selectedFile.getAbsolutePath();
             Image image = new Image(selectedFile.toURI().toString());
             photo.setImage(image);
-
-            // Puedes guardar la ruta del archivo seleccionado si es necesario
-            String imagePath = selectedFile.getAbsolutePath();
             System.out.println("Imagen seleccionada: " + imagePath);
         } else {
             System.out.println("Selección de imagen cancelada");
@@ -78,46 +73,57 @@ public class ControllerEditUser {
 
     @FXML
     void update(ActionEvent event) {
-        String newDni = txtDni.getText();
+        String userDni = UserSession.getInstance().getUsuarioActual().getDni();
         String newName = txtName.getText();
         String newMail = txtMail.getText();
         String newPassword = txtPassword.getText();
+        newPassword = Utils.encryptSHA256(newPassword);
 
-        // Validar que los campos necesarios no estén vacíos
-        if (newDni.isEmpty() || newName.isEmpty() || newMail.isEmpty() || newPassword.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Campos incompletos", "Por favor, complete todos los campos.");
+        if (newName.isEmpty() || newMail.isEmpty() || newPassword.isEmpty()) {
+            Utils.showPopUp("Error", "Campos incompletos", "Por favor, complete todos los campos.", Alert.AlertType.WARNING);
             return;
         }
 
-        // Crear un nuevo objeto Usuario con los datos actualizados
-        Usuario usuarioActualizado = new Usuario(newDni, newName, newMail, newPassword, null /*foto*/);
+        Usuario usuarioActualizado;
+
+        if (imagePath != null) {
+            File selectedFile = new File(imagePath);
+            byte[] fileBytes = null;
+            try {
+                fileBytes = Files.readAllBytes(selectedFile.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            usuarioActualizado = new Usuario(userDni, newName, newMail, newPassword, fileBytes);
+            Image image = Utils.convertBytesToArray(fileBytes);
+            if (image != null) {
+                photo.setImage(image);
+            } else {
+                photo.setImage(null);
+                System.out.println("No se pudo cargar la imagen.");
+            }
+        } else {
+            usuarioActualizado = new Usuario(userDni, newName, newMail, newPassword, null /*foto*/);
+        }
+
         UsuarioDAO usuarioDAO = new UsuarioDAO(Usuario.class);
-     boolean actualizacionExitosa = usuarioDAO.update(usuarioActualizado);
+        boolean actualizacionExitosa = usuarioDAO.update(usuarioActualizado);
 
         if (actualizacionExitosa) {
-            showAlert(Alert.AlertType.INFORMATION, "Éxito", "¡Cuenta actualizada con éxito!");
+            Utils.showPopUp("Éxito", "Se ha realizado correctamente", "¡Cuenta actualizada con éxito!", Alert.AlertType.INFORMATION);
         } else {
-            showAlert(Alert.AlertType.ERROR, "Error", "Error al actualizar la cuenta. Por favor, inténtelo de nuevo.");
+            Utils.showPopUp("Error", "Ha fallado la actualización", "Por favor, inténtelo de nuevo.", Alert.AlertType.ERROR);
         }
-        // Puedes mostrar un mensaje de éxito al usuario
-        System.out.println("¡Cuenta actualizada con éxito!");
-        System.out.println("Botón de retroceso clicado");
-
     }
+
 
     @FXML
     private void back() throws IOException {
         App.setRoot("home");
-
     }
 
-    private void showAlert(Alert.AlertType alertType, String éxito, String s) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(éxito);
-        alert.setHeaderText(null);
-        alert.setContentText(s);
-        alert.showAndWait();
-    }
 
 }
+
 
