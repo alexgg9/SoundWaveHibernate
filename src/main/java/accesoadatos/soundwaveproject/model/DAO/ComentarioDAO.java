@@ -35,7 +35,8 @@ public class ComentarioDAO extends DAO<Comentario>{
     }
 
     public Comentario find(int id){
-        return (Comentario) super.find(id, Comentario.class);
+        Comentario comentario = (Comentario) super.find(id, Comentario.class);
+        return comentario;
     }
 
     public List<Comentario> findAll() {

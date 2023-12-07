@@ -3,6 +3,7 @@ package accesoadatos.soundwaveproject.model.DAO;
 import accesoadatos.soundwaveproject.model.Connection.Connection;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 public class DAO<T> {
     private static EntityManager manager;
@@ -33,17 +34,24 @@ public class DAO<T> {
 
     public boolean update(T o) {
         boolean updated = false;
-        manager = Connection.getConnect().createEntityManager();
-        if (manager.contains(o)) {
-            try {
-                manager.getTransaction().begin();
-                manager.merge(o);
-                manager.getTransaction().commit();
+        EntityManager manager = Connection.getConnect().createEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        try {
+            if (!manager.contains(o)) {
+                o = manager.merge(o);
+            }
+            transaction.begin();
+            manager.merge(o);
+            transaction.commit();
+            updated = true;
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (manager != null && manager.isOpen()) {
                 manager.close();
-                updated = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                updated = false;
             }
         }
         return updated;

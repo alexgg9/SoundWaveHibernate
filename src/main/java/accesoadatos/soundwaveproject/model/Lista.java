@@ -158,10 +158,7 @@ public class Lista implements Serializable {
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
-                ", creador=" + creador +
-                ", cantidadComentarios=" + comentarios.size() +
-                ", cantidadSuscriptores=" + suscriptores.size() +
-                ", cantidadCanciones=" + canciones.size() +
+                ", numSuscripciones=" + numSuscripciones +
                 '}';
     }
 }
