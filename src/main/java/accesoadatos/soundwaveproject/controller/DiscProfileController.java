@@ -19,6 +19,8 @@ import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -54,49 +56,61 @@ public class DiscProfileController implements Initializable {
     private MediaPlayer mediaPlayer;
 
     private File directory;
-    private File [] files;
+    private File[] files;
     private ArrayList<File> songs;
     private int songNumber;
     private Timer timer;
     private TimerTask task;
     private boolean running;
 
-
-
-
     private DiscoDAO discoDAO;
+    private boolean isSongPlaying = false;
+    private String selectedSongUrl;
+    private String selectedSongName;
 
     public void initialize(URL arg0, ResourceBundle arg1) {
         discoDAO = new DiscoDAO(Disco.class);
 
-        songs = new ArrayList<File>();
+        songs = new ArrayList<>();
         directory = new File(getClass().getResource("/songs").getFile());
         files = directory.listFiles();
 
-        if (files != null){
-            for (File file : files) {
-                songs.add(file);
-                System.out.println(file);
-            }
+        if (files != null) {
+            songs.addAll(Arrays.asList(files));
+            songs.forEach(file -> System.out.println(file));
         }
 
-        media = new Media(songs.get(songNumber).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        songLabel.setText(songs.get(songNumber).getName());
-
-        mediaPlayer.setVolume(volumeSlider.getValue());  // Configura el volumen inicial
-
-        volumeSlider.setValue(0.1);  // Establece el valor inicial del volumeSlider a 1.0 (máximo volumen)
-
-        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number t1) {
-                mediaPlayer.setVolume(volumeSlider.getValue() / 100.0); // Ajusta la escala del volumen
+        volumeSlider.valueProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            if (mediaPlayer != null) {
+                mediaPlayer.setVolume(volumeSlider.getValue() / 100.0);
             }
         });
 
+        canciones.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Cancion> observable, Cancion oldValue, Cancion newValue) -> {
+            if (newValue != null) {
+                selectedSongUrl = newValue.getUrl();
+                selectedSongName = newValue.getNombre();
+                playSong(selectedSongUrl, selectedSongName);
+            }
+        });
 
+    }
 
+    private void playSong(String songURL, String songName) {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+
+        try {
+            Path path = Paths.get(songURL);
+            String absolutePath = path.toAbsolutePath().toUri().toString();
+            media = new Media(absolutePath);
+            mediaPlayer = new MediaPlayer(media);
+            songLabel.setText(songName);
+            mediaPlayer.setVolume(volumeSlider.getValue() / 100.0); // Inicializar el volumen
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -131,29 +145,22 @@ public class DiscProfileController implements Initializable {
     }
 
     public void previousMedia() {
-
-        if(songNumber > 0){
+        if (songNumber > 0) {
             songNumber--;
             mediaPlayer.stop();
-
-            if (running){
+            if (running) {
                 cancelTimer();
             }
-
             media = new Media(songs.get(songNumber).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             songLabel.setText(songs.get(songNumber).getName());
             playMedia();
-
         } else {
-
-            songNumber = songs.size() -1;
+            songNumber = songs.size() - 1;
             mediaPlayer.stop();
-
-            if (running){
+            if (running) {
                 cancelTimer();
             }
-
             media = new Media(songs.get(songNumber).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             songLabel.setText(songs.get(songNumber).getName());
@@ -163,44 +170,39 @@ public class DiscProfileController implements Initializable {
 
     @FXML
     public void playMedia() {
-        // Invierte el texto del botón y alterna entre "Play" y "Pause"
-        if (playButton.getText().equals("Play")) {
-            playButton.setText("Pause");
-            mediaPlayer.setVolume(volumeSlider.getValue()); // Configura el volumen antes de reproducir
-            mediaPlayer.play();
-            beginTimer();
-        } else {
-            playButton.setText("Play");
-            mediaPlayer.pause();
-            cancelTimer();
+        if (mediaPlayer != null) {
+            if (!isSongPlaying) {
+                playSong(selectedSongUrl, selectedSongName);
+                playButton.setText("Pause");
+                mediaPlayer.play();
+                beginTimer();
+                isSongPlaying = true;
+            } else {
+                playButton.setText("Play");
+                mediaPlayer.pause();
+                cancelTimer();
+                isSongPlaying = false;
+            }
         }
     }
-
 
     public void nextMedia() {
-
-        if(songNumber < songs.size() - 1){
+        if (songNumber < songs.size() - 1) {
             songNumber++;
             mediaPlayer.stop();
-
-            if (running){
+            if (running) {
                 cancelTimer();
             }
-
             media = new Media(songs.get(songNumber).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             songLabel.setText(songs.get(songNumber).getName());
             playMedia();
-
         } else {
-
             songNumber = 0;
             mediaPlayer.stop();
-
-            if (running){
+            if (running) {
                 cancelTimer();
             }
-
             media = new Media(songs.get(songNumber).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             songLabel.setText(songs.get(songNumber).getName());
@@ -208,7 +210,7 @@ public class DiscProfileController implements Initializable {
         }
     }
 
-    public void beginTimer(){
+    public void beginTimer() {
         timer = new Timer();
         task = new TimerTask() {
             @Override
@@ -216,10 +218,9 @@ public class DiscProfileController implements Initializable {
                 running = true;
                 double current = mediaPlayer.getCurrentTime().toSeconds();
                 double end = media.getDuration().toSeconds();
-                System.out.println(current/end);
-                songProgressBar.setProgress(current/end);
-
-                if(current/end == 1){
+                System.out.println(current / end);
+                songProgressBar.setProgress(current / end);
+                if (current / end == 1) {
                     cancelTimer();
                 }
             }
@@ -227,9 +228,8 @@ public class DiscProfileController implements Initializable {
         timer.scheduleAtFixedRate(task, 1000, 1000);
     }
 
-    public void cancelTimer(){
+    public void cancelTimer() {
         running = false;
         timer.cancel();
     }
-
 }
