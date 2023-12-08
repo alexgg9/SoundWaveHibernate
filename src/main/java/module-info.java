@@ -7,6 +7,7 @@ module SoundWaveProject {
     requires java.xml.bind;
     requires java.persistence;
     requires org.hibernate.orm.core;
+    requires javafx.media;
 
 
     opens accesoadatos.soundwaveproject.controller to javafx.fxml;
@@ -14,6 +15,5 @@ module SoundWaveProject {
     opens accesoadatos.soundwaveproject.model;
     exports accesoadatos.soundwaveproject;
     exports accesoadatos.soundwaveproject.model;
-    exports accesoadatos.soundwaveproject.testsDAO;
     exports accesoadatos.soundwaveproject.controller;
 }

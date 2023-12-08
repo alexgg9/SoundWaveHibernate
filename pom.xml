@@ -126,6 +126,12 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>17.0.2</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
