@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public class Loggers {
     public static void LogsSevere(String s) {
-        try (InputStream configFile = Loggers.class.getResourceAsStream("Logger.properties")) {
+        try (InputStream configFile = Loggers.class.getResourceAsStream("/Logger.properties")) {
             if (configFile != null) {
                 LogManager.getLogManager().readConfiguration(configFile);
             } else {
@@ -22,7 +22,7 @@ public class Loggers {
     }
 
     public static void LogsInfo(String s) {
-        try (InputStream configFile = Loggers.class.getResourceAsStream("Logger.properties")) {
+        try (InputStream configFile = Loggers.class.getResourceAsStream("/Logger.properties")) {
             if (configFile != null) {
                 LogManager.getLogManager().readConfiguration(configFile);
             } else {
